@@ -38,7 +38,7 @@ function mostrarEditables() {
   editables = editables.sort();
   textos = "";
   for (var i = 0; i < editables.length; i++) {
-    textos = "<input class=\"casilla\" type=text id=\"reg" + editables[i].slice(0, 13) + "\" value=\"" + editables[i].slice(14) + "\"><br>" + textos;
+    textos = "<span>"+editables[i].slice(14,31)+"</span><input class=\"casilla\" type=text id=\"reg" + editables[i].slice(0, 13) + "\" value=\"" + editables[i].slice(31) + "\"><br>" + textos;
   }
   document.getElementById("registrosEditables").innerHTML = textos;
 }
@@ -50,9 +50,10 @@ function guardarEditables() {
       localStorage.removeItem(element.id);
     }
     else {
-      localStorage.setItem(element.id, element.value);
+      fecha = localStorage.getItem(element.id);
+      localStorage.setItem(element.id, fecha.slice(0,16) + " " + element.value);
     }
   }
-  mostrarEditables();
+  window.location.href = "index.html";
 
 }
