@@ -14,10 +14,38 @@
   <br><br>
   <div id="registrosEditables">
   </div>
+  <br>
+  <button id="btnSave">Exportar datos</button>
 </body>
 <script src="main.js"></script>
 <script>
   mostrarEditables()
+
+
+  const downloadToFile = (content, filename, contentType) => {
+  const a = document.createElement('a');
+  const file = new Blob([content], {type: contentType});
+
+  a.href= URL.createObjectURL(file);
+  a.download = filename;
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+};
+
+document.querySelector('#btnSave').addEventListener('click', () => {
+  archivo = "";
+  for (const key in localStorage) {
+    if (key.slice(0, 3) == "reg") {
+      archivo = archivo + key + " ; " + localStorage.getItem(key) + "\n";
+    }
+  }
+
+  downloadToFile(archivo, 'datosdiariojs.csv', 'text/csv');
+});
+
 </script>
+
+
 
 </html>
