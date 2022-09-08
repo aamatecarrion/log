@@ -1,5 +1,3 @@
-mostrar()
-
 function nuevoRegistro() {
   let registro = document.getElementById("registrador").value;
   if (registro.trim() !== "") {
@@ -28,4 +26,33 @@ function mostrar() {
     entradas = registros[i].slice(14) + "<br>" + entradas;
   }
   document.getElementById("entradas").innerHTML = entradas;
+}
+
+function mostrarEditables() {
+  editables = [];
+  for (const key in localStorage) {
+    if (key.slice(0, 3) == "reg") {
+      editables.push(key.slice(3) + " " + localStorage.getItem(key));
+    }
+  }
+  editables = editables.sort();
+  textos = "";
+  for (var i = 0; i < editables.length; i++) {
+    textos = "<input class=\"casilla\" type=text id=\"reg" + editables[i].slice(0, 13) + "\" value=\"" + editables[i].slice(14) + "\"><br>" + textos;
+  }
+  document.getElementById("registrosEditables").innerHTML = textos;
+}
+
+function guardarEditables() {
+  const allElements = document.getElementsByClassName("casilla");
+  for (const element of allElements) {
+    if (element.value == ""){
+      localStorage.removeItem(element.id);
+    }
+    else {
+      localStorage.setItem(element.id, element.value);
+    }
+  }
+  mostrarEditables();
+
 }
