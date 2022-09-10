@@ -11,9 +11,11 @@ function nuevoRegistro() {
     mostrar();
   }
   document.getElementById("registrador").value = "";
+  dias();
 }
 
 function mostrar() {
+  dias();
   registros = [];
   for (const key in localStorage) {
     if (key.slice(0, 3) == "reg") {
@@ -29,6 +31,7 @@ function mostrar() {
 }
 
 function mostrarEditables() {
+  dias();
   editables = [];
   for (const key in localStorage) {
     if (key.slice(0, 3) == "reg") {
@@ -38,20 +41,35 @@ function mostrarEditables() {
   editables = editables.sort();
   textos = "";
   for (var i = 0; i < editables.length; i++) {
-    textos = "<span>"+editables[i].slice(14,31)+"</span><input class=\"casilla\" type=text id=\"reg" + editables[i].slice(0, 13) + "\" value=\"" + editables[i].slice(31) + "\"><br>" + textos;
+    textos = "<span>" + editables[i].slice(14, 33) + "</span><input class=\"casilla\" type=text id=\"reg" + editables[i].slice(0, 13) + "\" value=\"" + editables[i].slice(33) + "\"><br>" + textos;
   }
   document.getElementById("registrosEditables").innerHTML = textos;
 }
 
+function dias() {
+  nombredias = ["dom", "dom", "lun", "mar", "mie", "jue", "vie", "sab"];
+  for (const key in localStorage) {
+    registro = localStorage.getItem(key);
+    if (registro) {
+      numerodia = registro.slice(0, 1);
+      if (isNaN(numerodia)) {
+        continue;
+      }
+      registrobien = nombredias[numerodia] + registro.slice(1);
+      localStorage.setItem(key, registrobien);
+    }
+  }
+}
+
 function guardarEditables() {
+  dias();
   const allElements = document.getElementsByClassName("casilla");
   for (const element of allElements) {
-    if (element.value == ""){
+    if (element.value == "") {
       localStorage.removeItem(element.id);
-    }
-    else {
+    } else {
       fecha = localStorage.getItem(element.id);
-      localStorage.setItem(element.id, fecha.slice(0,16) + " " + element.value);
+      localStorage.setItem(element.id, fecha.slice(0, 18) + " " + element.value);
     }
   }
   window.location.href = "index.html";
