@@ -1,0 +1,230 @@
+* {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+body{
+  margin: 0px;
+}
+.boton {
+  display: inline-block;
+  cursor: pointer;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  background-color: rgb(201, 201, 201);
+}
+.boton:hover {
+  opacity: 0.7;
+}
+#entradas {
+  margin-top: 10px;
+}
+#favoritos {
+  background-color: #d9dd12;
+  margin-top: 10px;
+}
+#divFavoritos{
+  background-color:#fc9fff ;
+  padding: 5px;
+  
+}
+.inputnuevofav{
+  margin: 7px;
+}
+.inputnuevofav > *{
+  padding: 10px;
+  border-radius: 6px;
+}
+.inputnuevofav .boton{
+  margin-left: 7px;
+}
+
+.editarfavs,
+.noeditarfavs{
+  display: inline-block;
+  background-color: #12d8df;
+  margin: 7px;
+}
+.submitfav {
+  display: inline-block;
+  background-color: #12d8df;
+}
+.noeditarfavs {
+  opacity: 0.8;
+}
+.fav {
+  display: inline-block;
+  background-color: #f2ab06;
+}
+.faveliminar {
+  display: inline-block;
+  background-color: #ff5050;
+}
+.faveliminar:hover {
+  opacity: 0.5;
+}
+.textonuevofav {
+  display: inline-block;
+}
+.esfav {
+  display: inline-block;
+  background-color: #fbff00;
+}
+.noesfav {
+  display: inline-block;
+  padding: 10px;
+  margin: 7px;
+}
+.noesfav:hover {
+  background-color: #fbff00;
+  opacity: 1;
+}
+.tituloDia {
+  margin: 0px;
+  padding: 6px;
+}
+.oculto{
+  display: none;
+}
+
+#divmenu{
+  background-color: #1f1f1f;
+}
+#contenidomenu{
+  background-color: #353535;
+  color:#ffffff
+}
+#opcioncifrar{
+  padding: 10px;
+  cursor: pointer;
+}
+#opcioncifrar:hover{
+  background-color: #666666;
+}
+#textoregistrar{
+  padding:10px;
+  border-radius: 6px;
+}
+#divRegistrar{
+  margin: 7px
+}
+#botonmenu{
+  display: inline-block;
+  color: #f0f0f0;
+  background-color: #000000;
+  padding: 10px;
+  cursor: pointer;
+}
+#botonmenu:hover{
+  background-color: #363636;
+}
+.registro {
+  padding: 6px;
+  cursor: pointer;
+}
+.registro:hover {
+  backdrop-filter: brightness(0.9);
+}
+.dia {
+  padding-top: 5px;
+}
+.divdetallado {
+  background-color: #f4dc72;
+}
+.divdetallado > * {
+  padding: 10px;
+}
+.tituloregistro{
+  margin: 0px;
+}
+.botonguardartexto{
+  background-color:aquamarine;
+  margin-left: 0px;
+}
+.textoeditable{
+  background-color: #faeaa5;
+}
+.textolargo{
+  padding: 10px;
+}
+.botoneditartexto{
+  background-color: #ffc0fa;
+}
+.volver {
+  display: inline-block;
+  margin: 5px;
+}
+.volver:hover {
+  backdrop-filter: brightness(0.9);
+}
+.eliminar {
+  display: inline-block;
+  background-color: rgb(221, 0, 0);
+  margin: 5px;
+}
+.eliminar:hover {
+  opacity: 0.5;
+}
+#divDescifrar{
+  text-align: center;
+}
+.textodescifrar.correcto{
+  background-color: #5ff378;
+}
+.textodescifrar.error{
+  background-color: #ff8181;
+}
+.botondescifrar.correcto{
+  background-color: #5ff378;
+}
+.botondescifrar.error{
+  background-color: #ff5050;
+}
+.mensajedescifrar.correcto{
+  color: #00ff00;
+}
+.mensajedescifrar.error{
+  color: #ff5050;
+}
+.textodescifrar{
+  padding:9px;
+  border-radius: 6px;
+}
+
+.lunes {
+  background-color: #fbff00;
+}
+.martes {
+  background-color: #ff6161;
+}
+.miercoles {
+  background-color: #ffc800;
+}
+.jueves {
+  background-color: #ffa6f9;
+}
+.viernes {
+  background-color: #5ff378;
+}
+.sabado {
+  background-color: #ff8080;
+}
+.domingo {
+  background-color: #7d8aff;
+}
+.botonregistrar{
+  margin-left: 7px;
+}
+.submitfav.boton{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.textocifrar{
+  padding:7px;
+  border-radius: 6px;
+}
+.botoncifrar{
+  padding:7px;
+}
+#inputcifrar{
+  text-align: center;
+}

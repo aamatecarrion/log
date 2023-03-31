@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Log</title>
-</head>
-
-<body>
-  <input type="text" id="registrador">
-  <input type="button" value="Registrar" onclick="nuevoRegistro()">
-  <br><br>
-  <a href="editar_registros.html">Editar</a>
-  <br><br>
-  <div id="entradas">
-  </div>
-</body>
-<script src="main.js"></script>
-<script>
-  mostrar();
-</script>
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <title>Log</title>
+    <link rel="icon" type="image/x-icon" href="log.png">
+  </head>
+  <body>
+      <div id="divMenu"></div>
+      <div id="divDescifrar"></div>
+      <div id="divCifrar"></div>
+      <div id="divRegistrar"></div>
+      <div id="divFavoritos"></div>
+      <div id="divDetallado"></div>
+      <div id="divRegistros"></div>
+  </body>
+  <script src="main.js"></script>
 </html>
