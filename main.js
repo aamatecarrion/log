@@ -1,10 +1,13 @@
 let regs = [];
 let favs = [];
 let pass = "";
+let registroActual = null;
 const nombresDias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const clasesDias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 //obtener los divs principales
 const divMenu = document.getElementById("divMenu");
+const divImportar = document.getElementById("divImportar");
+const divExportar = document.getElementById("divExportar");
 const divDescifrar = document.getElementById("divDescifrar");
 const divCifrar = document.getElementById("divCifrar");
 const divRegistrar = document.getElementById("divRegistrar");
@@ -15,25 +18,128 @@ const divRegistros = document.getElementById("divRegistros");
 iniciar();
 function crearDivMenu() {
   divMenu.innerHTML = "";
-  divMenu.id = "divmenu";
   let botonMenu = document.createElement("div");
   divMenu.appendChild(botonMenu);
   botonMenu.id = "botonmenu";
   botonMenu.innerHTML = "Menu";
+
   let contenidoMenu = document.createElement("div");
   divMenu.appendChild(contenidoMenu);
-  contenidoMenu.classList.add("oculto");
   contenidoMenu.id = "contenidomenu";
-  let opcionCifrar = document.createElement("div");
-  contenidoMenu.appendChild(opcionCifrar);
-  opcionCifrar.id = "opcioncifrar";
-  opcionCifrar.innerHTML = "Cifrar";
+  contenidoMenu.classList.add("oculto");
+
   botonMenu.addEventListener("click", toggleMenu);
   function toggleMenu() {
     contenidoMenu.classList.toggle("oculto");
-    divCifrar.innerHTML = "";
   }
+
+  let opcionCifrar = document.createElement("div");
+  contenidoMenu.appendChild(opcionCifrar);
+  opcionCifrar.classList.add("opcion");
+  opcionCifrar.innerHTML = "Cifrar";
   opcionCifrar.addEventListener("click", crearDivCifrar);
+
+  let opcionExportar = document.createElement("div");
+  contenidoMenu.appendChild(opcionExportar);
+  opcionExportar.classList.add("opcion");
+  opcionExportar.innerHTML = "Exportar";
+  opcionExportar.addEventListener("click", crearDivExportar);
+
+  let opcionImportar = document.createElement("div");
+  contenidoMenu.appendChild(opcionImportar);
+  opcionImportar.classList.add("opcion");
+  opcionImportar.innerHTML = "Importar";
+  opcionImportar.addEventListener("click", crearDivImportar);
+}
+function crearDivImportar() {
+  document.querySelectorAll("body > div").forEach((div) => {
+    div.innerHTML = "";
+  });
+  //crear boton de volver
+  let volver = document.createElement("div");
+  volver.classList.add("boton", "volver");
+  volver.innerHTML = "Volver";
+  volver.addEventListener("click", () => {
+    divImportar.innerHTML = "";
+    crearDivMenu();
+    crearDivRegistrar();
+    crearDivFavoritos();
+    crearDivRegistros();
+  });
+
+  let textoImportar = document.createElement("textarea");
+  textoImportar.id = "textoimportar";
+  textoImportar.placeholder = "Pega aquí tus datos";
+  textoImportar.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight + 5) + 'px';
+  });
+  console.log(textoImportar)
+  let botonImportar = document.createElement("div");
+  botonImportar.classList.add("boton", "importar");
+  botonImportar.innerHTML = "Importar";
+  
+  botonImportar.addEventListener("click", importar);
+  divImportar.appendChild(volver);
+  divImportar.appendChild(botonImportar);
+  divImportar.appendChild(textoImportar);
+  function importar() {
+    if (comprobarJSON(textoImportar.value)) {
+      let importar = JSON.parse(textoImportar.value);
+      console.log(importar)
+      for (let i = 0; i < importar.registros.length; i++) {
+        importar.registros[i].fecha = new Date(importar.registros[i].fecha);
+      }
+      console.log(importar)
+      regs=regs.concat(importar.registros);
+      favs=favs.concat(importar.favoritos);
+      duplicados();
+      guardar();
+      alert("Datos importados");
+    } else if (textoImportar.value == "") {
+      console.log("vacio");
+    } else {
+      alert("Los datos no están bien formados");
+    }
+  }
+}
+
+function crearDivExportar() {
+  document.querySelectorAll("body > div").forEach((div) => {
+    div.innerHTML = "";
+  });
+  //crear boton de volver
+  let volver = document.createElement("div");
+  divExportar.appendChild(volver);
+  volver.classList.add("boton", "volver");
+  volver.innerHTML = "Volver";
+  volver.addEventListener("click", () => {
+    divExportar.innerHTML = "";
+    crearDivMenu();
+    crearDivRegistrar();
+    crearDivFavoritos();
+    if (registroActual != null) {
+      crearDivDetallado(registroActual);
+    } else {
+      crearDivRegistros();
+    }
+  });
+  const exportar = {};
+  exportar.registros = regs;
+  exportar.favoritos = favs;
+  let botonCopiar = document.createElement("div");
+  divExportar.appendChild(botonCopiar);
+  botonCopiar.classList.add("boton", "copiar");
+  botonCopiar.innerHTML = "Copiar";
+  botonCopiar.addEventListener("click", function () {
+    portapapeles(textoExportar);
+    alert("Datos copiados al portapapeles");
+  });
+
+  let textoExportar = document.createElement("div");
+  divExportar.appendChild(textoExportar);
+  textoExportar.innerHTML = JSON.stringify(exportar);
+  textoExportar.classList.add("textoexportar");
 }
 function crearDivDescifrar() {
   //crear input descifrar
@@ -79,7 +185,9 @@ function crearDivDescifrar() {
   divDescifrar.appendChild(mensajeDescifrar);
 }
 function crearDivCifrar() {
-  divCifrar.innerHTML = "";
+  document.querySelectorAll("body > div").forEach((div) => {
+    div.innerHTML = "";
+  });
   //crear input cifrar
   let inputCifrar = document.createElement("div");
   let textoCifrar = document.createElement("input");
@@ -111,8 +219,16 @@ function crearDivCifrar() {
       alert('Se ha cambiado la contraseña de "' + pass + '" a "' + textoCifrar.value + '"');
     }
     pass = textoCifrar.value;
+    divCifrar.innerHTML = "";
     guardar();
-    textoCifrar.value = "";
+    crearDivMenu();
+    crearDivRegistrar();
+    crearDivFavoritos();
+    if (registroActual != null) {
+      crearDivDetallado(registroActual);
+    } else {
+      crearDivRegistros();
+    }
   }
 }
 function crearDivRegistrar() {
@@ -140,30 +256,26 @@ function crearDivRegistrar() {
       regNuevo.texto = textoRegistrar.value;
 
       regs.unshift(regNuevo);
-      crearDivDetallado(0);
+      crearDivRegistros();
       guardar();
-      divRegistros.innerHTML = "";
       textoRegistrar.value = "";
     }
   }
 }
 function crearDivFavoritos() {
   //esta funcion deja vacio el cuadro de favoritos antes de mostrarlos
-  divFavoritos.style.display = "block";
   divFavoritos.innerHTML = "";
   let editarFavs = document.createElement("div");
   divFavoritos.appendChild(editarFavs);
   editarFavs.innerHTML = "Editar";
-  editarFavs.classList.add("editarfavs");
-  editarFavs.classList.add("boton");
+  editarFavs.classList.add("editarfavs", "boton");
   editarFavs.addEventListener("click", crearEditarFavs);
   //botones de favoritos guardados
   for (let i = 0; i < favs.length; i++) {
     //añadir un botón al cuadro
     let favHtml = document.createElement("div");
     divFavoritos.appendChild(favHtml);
-    favHtml.classList.add("fav");
-    favHtml.classList.add("boton");
+    favHtml.classList.add("fav", "boton");
     //añadir el texto
     favHtml.innerHTML = favs[i];
     //añadir un escuchador al boton de favorito
@@ -200,6 +312,9 @@ function crearDivFavoritos() {
         favs.unshift(tnf.value);
         guardar();
         crearEditarFavs();
+        if (registroActual != null) {
+          crearDivDetallado(registroActual);
+        }
         tnf.value = "";
       }
     }
@@ -231,10 +346,16 @@ function crearDivFavoritos() {
       favs.splice(indiceFav, 1);
       guardar();
       crearEditarFavs();
+      if (registroActual != null) {
+        crearDivDetallado(registroActual);
+      } else {
+        crearDivRegistros();
+      }
     }
   }
 }
 function crearDivDetallado(i) {
+  registroActual = i;
   //crear div de la información del registro
   //limpiar el html del div detallado por si tuviera algo
   divDetallado.innerHTML = "";
@@ -259,7 +380,7 @@ function crearDivDetallado(i) {
   let contadorTiempo = document.createElement("div");
   divDetallado.appendChild(contadorTiempo);
   contadorTiempo.innerHTML = mostrarTiempo(i);
-  let intervaloContador = setInterval(function () {
+  setInterval(function () {
     contadorTiempo.innerHTML = mostrarTiempo(i);
   }, 200);
   contadorTiempo.classList.add("contadorTiempo");
@@ -332,7 +453,9 @@ function crearDivDetallado(i) {
   volver.innerHTML = "Volver";
   volver.classList.add("volver");
   volver.addEventListener("click", () => {
+    clearInterval()
     divDetallado.innerHTML = "";
+    registroActual = null;
     crearDivRegistros();
   });
   //div boton favoritos
@@ -373,6 +496,7 @@ function crearDivDetallado(i) {
   eliminar.classList.add("eliminar");
   eliminar.addEventListener("click", function () {
     if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
+      clearInterval()
       divDetallado.innerHTML = "";
       eliminarRegistro(i);
     }
@@ -408,6 +532,7 @@ function crearDivDetallado(i) {
 }
 function crearDivRegistros() {
   divRegistros.innerHTML = "";
+  registroActual = null;
   dias = [];
   function getFechaString(fechaHora) {
     return `${fechaHora.getFullYear()}-${fechaHora.getMonth() + 1}-${fechaHora.getDate()}`;
@@ -498,7 +623,6 @@ function comprobarJSON(entrada) {
   }
 }
 function iniciar() {
-  divFavoritos.style.display = "none";
   if (cargar()) {
     console.log("se ha cargado desde iniciar");
     crearDivMenu();
@@ -536,9 +660,15 @@ function cargar() {
   }
 }
 function guardar() {
-  localStorage.setItem("favoritos", Encrypt(JSON.stringify(favs), pass));
-  localStorage.setItem("registros", Encrypt(JSON.stringify(regs), pass));
-  console.log("guardado");
+  if (pass == "") {
+    localStorage.setItem("favoritos", JSON.stringify(favs));
+    localStorage.setItem("registros", JSON.stringify(regs));
+    console.log("guardado en texto plano");
+  } else {
+    localStorage.setItem("favoritos", Encrypt(JSON.stringify(favs), pass));
+    localStorage.setItem("registros", Encrypt(JSON.stringify(regs), pass));
+    console.log("guardado cifrado");
+  }
 }
 
 function Encrypt(text, key = "") {
@@ -602,4 +732,13 @@ function Decrypt(ciphertext, key = "") {
     console.log("esto que me has metido no concuerda");
     return "[]";
   }
+}
+function portapapeles(elemento) {
+  const range = document.createRange();
+  range.selectNodeContents(elemento);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  document.execCommand("copy");
+  sel.removeAllRanges();
 }

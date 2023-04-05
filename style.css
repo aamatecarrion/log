@@ -1,7 +1,7 @@
 * {
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
-body{
+body {
   margin: 0px;
 }
 .boton {
@@ -22,32 +22,31 @@ body{
   background-color: #d9dd12;
   margin-top: 10px;
 }
-#divFavoritos{
-  background-color:#fc9fff ;
-  padding: 5px;
-  
+#divFavoritos {
+  background-color: #fc9fff;
 }
-.inputnuevofav{
-  margin: 7px;
-}
-.inputnuevofav > *{
-  padding: 10px;
-  border-radius: 6px;
-}
-.inputnuevofav .boton{
-  margin-left: 7px;
-}
-
-.editarfavs,
-.noeditarfavs{
-  display: inline-block;
-  background-color: #12d8df;
-  margin: 7px;
+.inputnuevofav {
+  padding: 7px;
+  padding-top: 0px;
 }
 .submitfav {
   display: inline-block;
   background-color: #12d8df;
+  margin-left: 7px;
 }
+.textonuevofav {
+  padding: 10px;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+.editarfavs,
+.noeditarfavs {
+  display: inline-block;
+  background-color: #12d8df;
+  margin: 7px;
+}
+
 .noeditarfavs {
   opacity: 0.8;
 }
@@ -62,13 +61,6 @@ body{
 .faveliminar:hover {
   opacity: 0.5;
 }
-.textonuevofav {
-  display: inline-block;
-}
-.esfav {
-  display: inline-block;
-  background-color: #fbff00;
-}
 .noesfav {
   display: inline-block;
   padding: 10px;
@@ -78,43 +70,76 @@ body{
   background-color: #fbff00;
   opacity: 1;
 }
+.esfav {
+  display: inline-block;
+  background-color: #fbff00;
+}
 .tituloDia {
   margin: 0px;
   padding: 6px;
 }
-.oculto{
+.oculto {
   display: none;
 }
+.boton.copiar {
+  background-color: #5dfaff;
+  float: right;
+}
+.boton.importar {
+  background-color: #5dff78;
+  float: right;
+}
+#textoimportar {
+  display: block;
+  margin: auto;
+  margin-top: 15px;
+  width: 80%;
+  height: auto;
+  resize: none;
+  overflow: hidden;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1.5;
+  word-break: break-word;
+}
 
-#divmenu{
+#textoimportar:focus {
+  outline: none;
+}
+
+
+.textoexportar {
+  margin: 15px;
+}
+#divMenu {
   background-color: #1f1f1f;
 }
-#contenidomenu{
+#contenidomenu {
   background-color: #353535;
-  color:#ffffff
+  color: #ffffff;
 }
-#opcioncifrar{
+.opcion {
   padding: 10px;
   cursor: pointer;
 }
-#opcioncifrar:hover{
+.opcion:hover {
   background-color: #666666;
 }
-#textoregistrar{
-  padding:10px;
+#textoregistrar {
+  padding: 10px;
   border-radius: 6px;
 }
-#divRegistrar{
-  margin: 7px
+#divRegistrar {
+  margin: 7px;
 }
-#botonmenu{
+#botonmenu {
   display: inline-block;
   color: #f0f0f0;
   background-color: #000000;
   padding: 10px;
   cursor: pointer;
 }
-#botonmenu:hover{
+#botonmenu:hover {
   background-color: #363636;
 }
 .registro {
@@ -133,20 +158,20 @@ body{
 .divdetallado > * {
   padding: 10px;
 }
-.tituloregistro{
+.tituloregistro {
   margin: 0px;
 }
-.botonguardartexto{
-  background-color:aquamarine;
+.botonguardartexto {
+  background-color: aquamarine;
   margin-left: 0px;
 }
-.textoeditable{
+.textoeditable {
   background-color: #faeaa5;
 }
-.textolargo{
+.textolargo {
   padding: 10px;
 }
-.botoneditartexto{
+.botoneditartexto {
   background-color: #ffc0fa;
 }
 .volver {
@@ -164,29 +189,29 @@ body{
 .eliminar:hover {
   opacity: 0.5;
 }
-#divDescifrar{
+#divDescifrar {
   text-align: center;
 }
-.textodescifrar.correcto{
+.textodescifrar.correcto {
   background-color: #5ff378;
 }
-.textodescifrar.error{
+.textodescifrar.error {
   background-color: #ff8181;
 }
-.botondescifrar.correcto{
+.botondescifrar.correcto {
   background-color: #5ff378;
 }
-.botondescifrar.error{
+.botondescifrar.error {
   background-color: #ff5050;
 }
-.mensajedescifrar.correcto{
+.mensajedescifrar.correcto {
   color: #00ff00;
 }
-.mensajedescifrar.error{
+.mensajedescifrar.error {
   color: #ff5050;
 }
-.textodescifrar{
-  padding:9px;
+.textodescifrar {
+  padding: 9px;
   border-radius: 6px;
 }
 
@@ -211,20 +236,20 @@ body{
 .domingo {
   background-color: #7d8aff;
 }
-.botonregistrar{
+.botonregistrar {
   margin-left: 7px;
 }
-.submitfav.boton{
+.submitfav.boton {
   margin-top: 0px;
   margin-bottom: 0px;
 }
-.textocifrar{
-  padding:7px;
+.textocifrar {
+  padding: 7px;
   border-radius: 6px;
 }
-.botoncifrar{
-  padding:7px;
+.botoncifrar {
+  padding: 7px;
 }
-#inputcifrar{
+#inputcifrar {
   text-align: center;
 }
