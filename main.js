@@ -1,98 +1,41 @@
 let regs = [];
 let favs = [];
 let pass = "";
+let editarFavoritos = false;
 let registroActual = null;
+let relojDivDetallado;
 const nombresDias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const clasesDias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
-//obtener los divs principales
-const divMenu = document.getElementById("divMenu");
-const divImportar = document.getElementById("divImportar");
-const divExportar = document.getElementById("divExportar");
-const divDescifrar = document.getElementById("divDescifrar");
-const divCifrar = document.getElementById("divCifrar");
-const divRegistrar = document.getElementById("divRegistrar");
-const divFavoritos = document.getElementById("divFavoritos");
-const divDetallado = document.getElementById("divDetallado");
-const divRegistros = document.getElementById("divRegistros");
-//ya están obtenidos
+const root = document.getElementById("root");
 iniciar();
 function crearDivMenu() {
-  divMenu.innerHTML = "";
-  let botonMenu = document.createElement("div");
-  divMenu.appendChild(botonMenu);
-  botonMenu.id = "botonmenu";
-  botonMenu.innerHTML = "Menu";
-
-  let contenidoMenu = document.createElement("div");
-  divMenu.appendChild(contenidoMenu);
-  contenidoMenu.id = "contenidomenu";
-  contenidoMenu.classList.add("oculto");
-
-  botonMenu.addEventListener("click", toggleMenu);
+  crearElemento("divMenu", root, "div", undefined, ["divmenu"]);
+  crearElemento("botonMenu", divMenu, "div", "Menu", ["botonmenu"], toggleMenu);
+  crearElemento("contenidoMenu", divMenu, "div", undefined, ["oculto", "contenidomenu"]);
   function toggleMenu() {
     contenidoMenu.classList.toggle("oculto");
   }
-
-  let opcionCifrar = document.createElement("div");
-  contenidoMenu.appendChild(opcionCifrar);
-  opcionCifrar.classList.add("opcion");
-  opcionCifrar.innerHTML = "Cifrar";
-  opcionCifrar.addEventListener("click", crearDivCifrar);
-
-  let opcionExportar = document.createElement("div");
-  contenidoMenu.appendChild(opcionExportar);
-  opcionExportar.classList.add("opcion");
-  opcionExportar.innerHTML = "Exportar";
-  opcionExportar.addEventListener("click", crearDivExportar);
-
-  let opcionImportar = document.createElement("div");
-  contenidoMenu.appendChild(opcionImportar);
-  opcionImportar.classList.add("opcion");
-  opcionImportar.innerHTML = "Importar";
-  opcionImportar.addEventListener("click", crearDivImportar);
+  crearElemento("opcionCifrar", contenidoMenu, "div", "Cifrar", ["opcion"], crearDivCifrar);
+  crearElemento("opcionExportar", contenidoMenu, "div", "Exportar", ["opcion"], crearDivExportar);
+  crearElemento("opcionImportar", contenidoMenu, "div", "Importar", ["opcion"], crearDivImportar);
 }
 function crearDivImportar() {
-  document.querySelectorAll("body > div").forEach((div) => {
-    div.innerHTML = "";
-  });
+  root.innerHTML = "";
+  crearElemento("divImportar", root, "div", undefined, ["divimportar"]);
   //crear boton de volver
-  let volver = document.createElement("div");
-  volver.classList.add("boton", "volver");
-  volver.innerHTML = "Volver";
-  volver.addEventListener("click", () => {
-    divImportar.innerHTML = "";
-    crearDivMenu();
-    crearDivRegistrar();
-    crearDivFavoritos();
-    crearDivRegistros();
+  crearElemento("volver", divImportar, "div", "Volver", ["boton", "volver"], function () {
+    inicio();
   });
-
-  let textoImportar = document.createElement("textarea");
-  textoImportar.id = "textoimportar";
-  textoImportar.placeholder = "Pega aquí tus datos";
-  textoImportar.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight + 5) + 'px';
-  });
-  console.log(textoImportar)
-  let botonImportar = document.createElement("div");
-  botonImportar.classList.add("boton", "importar");
-  botonImportar.innerHTML = "Importar";
-  
-  botonImportar.addEventListener("click", importar);
-  divImportar.appendChild(volver);
-  divImportar.appendChild(botonImportar);
-  divImportar.appendChild(textoImportar);
+  crearElemento("botonImportar", divImportar, "div", "Importar", ["boton", "importar"], importar);
   function importar() {
     if (comprobarJSON(textoImportar.value)) {
       let importar = JSON.parse(textoImportar.value);
-      console.log(importar)
+      console.log(importar);
       for (let i = 0; i < importar.registros.length; i++) {
         importar.registros[i].fecha = new Date(importar.registros[i].fecha);
       }
-      console.log(importar)
-      regs=regs.concat(importar.registros);
-      favs=favs.concat(importar.favoritos);
+      regs = regs.concat(importar.registros);
+      favs = favs.concat(importar.favoritos);
       duplicados();
       guardar();
       alert("Datos importados");
@@ -102,62 +45,32 @@ function crearDivImportar() {
       alert("Los datos no están bien formados");
     }
   }
+  crearElemento("textoImportar", divImportar, "textarea", "Pega aquí tus datos", ["textoimportar"]);
+  textoImportar.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + 5 + "px";
+  });
 }
-
 function crearDivExportar() {
-  document.querySelectorAll("body > div").forEach((div) => {
-    div.innerHTML = "";
-  });
-  //crear boton de volver
-  let volver = document.createElement("div");
-  divExportar.appendChild(volver);
-  volver.classList.add("boton", "volver");
-  volver.innerHTML = "Volver";
-  volver.addEventListener("click", () => {
-    divExportar.innerHTML = "";
-    crearDivMenu();
-    crearDivRegistrar();
-    crearDivFavoritos();
-    if (registroActual != null) {
-      crearDivDetallado(registroActual);
-    } else {
-      crearDivRegistros();
-    }
-  });
+  root.innerHTML = "";
+  crearElemento("divExportar", root, "div", undefined, ["divexportar"]);
+  crearElemento("volver", divExportar, "div", "Volver", ["boton", "volver"], inicio);
   const exportar = {};
   exportar.registros = regs;
   exportar.favoritos = favs;
-  let botonCopiar = document.createElement("div");
-  divExportar.appendChild(botonCopiar);
-  botonCopiar.classList.add("boton", "copiar");
-  botonCopiar.innerHTML = "Copiar";
-  botonCopiar.addEventListener("click", function () {
+  crearElemento("botonCopiar", divExportar, "div", "Copiar", ["boton", "copiar"], function () {
     portapapeles(textoExportar);
     alert("Datos copiados al portapapeles");
+    inicio();
   });
-
-  let textoExportar = document.createElement("div");
-  divExportar.appendChild(textoExportar);
-  textoExportar.innerHTML = JSON.stringify(exportar);
-  textoExportar.classList.add("textoexportar");
+  crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), ["textoexportar"]);
 }
 function crearDivDescifrar() {
-  //crear input descifrar
-
-  let textoDescifrar = document.createElement("input");
-  textoDescifrar.type = "text";
-  textoDescifrar.classList.add("textodescifrar");
-  let botonDescifrar = document.createElement("div");
-  botonDescifrar.classList.add("botondescifrar", "boton");
-  botonDescifrar.innerHTML = "Descifrar";
-  let mensajeDescifrar = document.createElement("div");
-  mensajeDescifrar.classList.add("mensajedescifrar");
-  textoDescifrar.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      descifrar();
-    }
-  });
-  botonDescifrar.addEventListener("click", descifrar);
+  root.innerHTML = "";
+  crearElemento("divDescifrar", root, "div", undefined, ["divdescifrar"]);
+  crearElemento("textoDescifrar", divDescifrar, "input", undefined, ["textodescifrar"], descifrar);
+  crearElemento("botonDescifrar", divDescifrar, "div", "Descifrar", ["botondescifrar", "boton"], descifrar);
+  crearElemento("mensajeDescifrar", divDescifrar, "div", undefined, ["mensajedescifrar"]);
   function descifrar() {
     pass = textoDescifrar.value;
     if (cargar()) {
@@ -167,11 +80,7 @@ function crearDivDescifrar() {
       });
       mensajeDescifrar.innerHTML = "Contraseña correcta :)";
       console.log("se ha cargado desde descifrar");
-      divDescifrar.innerHTML = "";
-      crearDivMenu();
-      crearDivRegistrar();
-      crearDivFavoritos();
-      crearDivRegistros();
+      inicio();
     } else {
       mensajeDescifrar.innerHTML = "La contraseña está mal :(";
       divDescifrar.querySelectorAll("*").forEach((elemento) => {
@@ -180,32 +89,14 @@ function crearDivDescifrar() {
       });
     }
   }
-  divDescifrar.appendChild(textoDescifrar);
-  divDescifrar.appendChild(botonDescifrar);
-  divDescifrar.appendChild(mensajeDescifrar);
 }
 function crearDivCifrar() {
-  document.querySelectorAll("body > div").forEach((div) => {
-    div.innerHTML = "";
-  });
+  root.innerHTML = "";
+  crearElemento("divCifrar", root, "div", undefined, ["divcifrar"]);
   //crear input cifrar
-  let inputCifrar = document.createElement("div");
-  let textoCifrar = document.createElement("input");
-  textoCifrar.type = "text";
-  textoCifrar.classList.add("textocifrar");
-  let botonCifrar = document.createElement("div");
-  botonCifrar.classList.add("botoncifrar", "boton");
-  botonCifrar.innerHTML = "Cifrar";
-  divCifrar.appendChild(inputCifrar);
-  inputCifrar.id = "inputcifrar";
-  inputCifrar.appendChild(textoCifrar);
-  inputCifrar.appendChild(botonCifrar);
-  textoCifrar.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      cifrar();
-    }
-  });
-  botonCifrar.addEventListener("click", cifrar);
+  crearElemento("inputCifrar", divCifrar, "div", undefined, ["inputcifrar"]);
+  crearElemento("textoCifrar", inputCifrar, "input", undefined, ["textocifrar"], cifrar);
+  crearElemento("botonCifrar", inputCifrar, "div", "Cifrar", ["botoncifrar", "boton"], cifrar);
   function cifrar() {
     if (pass == "" && textoCifrar.value != "") {
       alert('Se ha establecido la contraseña "' + textoCifrar.value + '"');
@@ -219,248 +110,144 @@ function crearDivCifrar() {
       alert('Se ha cambiado la contraseña de "' + pass + '" a "' + textoCifrar.value + '"');
     }
     pass = textoCifrar.value;
-    divCifrar.innerHTML = "";
     guardar();
-    crearDivMenu();
-    crearDivRegistrar();
-    crearDivFavoritos();
-    if (registroActual != null) {
-      crearDivDetallado(registroActual);
-    } else {
-      crearDivRegistros();
-    }
+    inicio();
   }
 }
 function crearDivRegistrar() {
+  crearElemento("divRegistrar", root, "div", undefined, ["divregistrar"]);
   //crear input registrar
-  let textoRegistrar = document.createElement("input");
-  textoRegistrar.type = "text";
-  textoRegistrar.id = "textoregistrar";
-
-  let botonRegistrar = document.createElement("div");
-  botonRegistrar.classList.add("botonregistrar", "boton");
-  botonRegistrar.innerHTML = "Registrar";
-  divRegistrar.appendChild(textoRegistrar);
-  divRegistrar.appendChild(botonRegistrar);
-
-  textoRegistrar.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      nuevoRegistro();
-    }
-  });
-  botonRegistrar.addEventListener("click", nuevoRegistro);
+  crearElemento("textoRegistrar", divRegistrar, "input", undefined, ["textoregistrar"], nuevoRegistro);
+  crearElemento("botonRegistrar", divRegistrar, "div", "Registrar", ["botonregistrar", "boton"], nuevoRegistro);
   function nuevoRegistro() {
     if (textoRegistrar.value) {
       let regNuevo = {};
       regNuevo.fecha = new Date();
       regNuevo.texto = textoRegistrar.value;
-
       regs.unshift(regNuevo);
-      crearDivRegistros();
       guardar();
-      textoRegistrar.value = "";
+      inicio();
     }
   }
 }
 function crearDivFavoritos() {
-  //esta funcion deja vacio el cuadro de favoritos antes de mostrarlos
-  divFavoritos.innerHTML = "";
-  let editarFavs = document.createElement("div");
-  divFavoritos.appendChild(editarFavs);
-  editarFavs.innerHTML = "Editar";
-  editarFavs.classList.add("editarfavs", "boton");
-  editarFavs.addEventListener("click", crearEditarFavs);
+  crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
+  crearElemento("editarFavs", divFavoritos, "div", "Editar", ["editarfavs", "boton"], function () {
+    editarFavoritos = true;
+    inicio();
+  });
   //botones de favoritos guardados
   for (let i = 0; i < favs.length; i++) {
     //añadir un botón al cuadro
-    let favHtml = document.createElement("div");
-    divFavoritos.appendChild(favHtml);
-    favHtml.classList.add("fav", "boton");
-    //añadir el texto
-    favHtml.innerHTML = favs[i];
-    //añadir un escuchador al boton de favorito
-    favHtml.addEventListener("click", function () {
-      let textoRegistrar = document.getElementById("textoregistrar");
+    crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function () {
       textoRegistrar.value = favHtml.textContent;
     });
   }
-  function crearEditarFavs() {
-    divFavoritos.innerHTML = "";
-    let noEditarFavs = document.createElement("div");
-    divFavoritos.appendChild(noEditarFavs);
-    noEditarFavs.classList.add("boton");
-    noEditarFavs.innerHTML = "No editar";
-    noEditarFavs.classList.add("noeditarfavs");
-    noEditarFavs.addEventListener("click", crearDivFavoritos);
-    //botones de favoritos guardados
-    for (let i = 0; i < favs.length; i++) {
-      //añadir un botón al cuadro
-      let favHtml = document.createElement("div");
-      divFavoritos.appendChild(favHtml);
-      favHtml.classList.add("faveliminar");
-      favHtml.classList.add("boton");
-      favHtml.innerHTML = favs[i];
-      //añadir un escuchador
-      favHtml.addEventListener("click", function () {
-        eliminarFav(i);
-        crearEditarFavs();
-      });
-    }
-    function nuevoFav(tnf) {
-      //tnf significa texto nuevo fav
-      if (tnf.value) {
-        favs.unshift(tnf.value);
-        guardar();
-        crearEditarFavs();
-        if (registroActual != null) {
-          crearDivDetallado(registroActual);
-        }
-        tnf.value = "";
-      }
-    }
-    //texto añadir fav
-    let inputNuevoFav = document.createElement("div");
-    divFavoritos.appendChild(inputNuevoFav);
-    inputNuevoFav.classList.add("inputnuevofav");
-    let textoNuevoFav = document.createElement("input");
-    inputNuevoFav.appendChild(textoNuevoFav);
-    textoNuevoFav.type = "text";
-    textoNuevoFav.placeholder = "Añadir";
-    textoNuevoFav.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        nuevoFav(textoNuevoFav);
-      }
+}
+function crearEditarFavs() {
+  crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
+  crearElemento("noEditarFavs", divEditarFavoritos, "div", "No editar", ["boton", "noeditarfavs"], function () {
+    editarFavoritos = false;
+    inicio();
+  });
+  //botones de favoritos guardados
+  for (let i = 0; i < favs.length; i++) {
+    crearElemento("favHtml", divEditarFavoritos, "div", favs[i], ["faveliminar", "boton"], function () {
+      eliminarFav(i);
     });
-    textoNuevoFav.classList.add("textonuevofav");
-
-    //boton nuevo fav
-    let botonNuevoFav = document.createElement("div");
-    inputNuevoFav.appendChild(botonNuevoFav);
-    botonNuevoFav.innerHTML = "Ok";
-    botonNuevoFav.classList.add("submitfav");
-    botonNuevoFav.classList.add("boton");
-    botonNuevoFav.addEventListener("click", function () {
-      nuevoFav(textoNuevoFav);
-    });
-    function eliminarFav(indiceFav) {
-      favs.splice(indiceFav, 1);
+  }
+  function eliminarFav(indiceFav) {
+    favs.splice(indiceFav, 1);
+    guardar();
+    inicio();
+  }
+  crearElemento("inputNuevoFav", divEditarFavoritos, "div", undefined, ["inputnuevofav"]);
+  crearElemento("textoNuevoFav", inputNuevoFav, "input", "Añadir", ["textonuevofav"], nuevoFav);
+  crearElemento("botonNuevoFav", inputNuevoFav, "div", "Ok", ["submitfav", "boton"], nuevoFav);
+  function nuevoFav() {
+    if (textoNuevoFav.value) {
+      favs.unshift(textoNuevoFav.value);
+      duplicados();
       guardar();
-      crearEditarFavs();
-      if (registroActual != null) {
-        crearDivDetallado(registroActual);
-      } else {
-        crearDivRegistros();
-      }
+      inicio();
     }
   }
 }
 function crearDivDetallado(i) {
+  crearElemento("divDetallado", root, "div", undefined, ["divdetallado"]);
   registroActual = i;
   //crear div de la información del registro
-  //limpiar el html del div detallado por si tuviera algo
-  divDetallado.innerHTML = "";
-  //h3 del titulo del registro
-  let tituloRegistro = document.createElement("h3");
-  divDetallado.classList.add("divdetallado");
-  divDetallado.appendChild(tituloRegistro);
-  tituloRegistro.innerHTML = `Registro: ${regs[i].texto}`;
-  tituloRegistro.classList.add("tituloregistro");
-  //fecha del registro
-  let fechaHoraRegistro = document.createElement("div");
-  divDetallado.appendChild(fechaHoraRegistro);
-  fechaHoraRegistro.innerHTML = `${nombresDias[regs[i].fecha.getDay()]} ${regs[
-    i
-  ].fecha.getFullYear()}-${regs[i].fecha.getMonth() + 1}-${regs[i].fecha.getDate()}
-    ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}:${regs[i].fecha.getSeconds().toString().padStart(2, "0")}`;
-  fechaHoraRegistro.classList.add("fecha");
+  crearElemento("tituloRegistro", divDetallado, "h3", `Registro: ${regs[i].texto}`, ["tituloregistro"]);
+  crearElemento(
+    "fechaHoraRegistro",
+    divDetallado,
+    "div",
+    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${regs[i].fecha.getMonth() + 1}-${regs[i].fecha.getDate()}
+    ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha.getMinutes().toString().padStart(2, "0")}:${regs[i].fecha.getSeconds().toString().padStart(2, "0")}`,
+    ["fecha"]
+  );
   //crear un contador de tiempo
-  let contadorTiempo = document.createElement("div");
-  divDetallado.appendChild(contadorTiempo);
-  contadorTiempo.innerHTML = mostrarTiempo(i);
-  setInterval(function () {
+  crearElemento("contadorTiempo", divDetallado, "div", mostrarTiempo(i), ["contadorTiempo"]);
+
+  relojDivDetallado = setInterval(function () {
     contadorTiempo.innerHTML = mostrarTiempo(i);
   }, 200);
-  contadorTiempo.classList.add("contadorTiempo");
 
-  //div texto editable
-  let divTextoLargo = document.createElement("div");
-  divDetallado.appendChild(divTextoLargo);
-  //texto editable
-  let textoEditable = document.createElement("div");
-  divTextoLargo.appendChild(textoEditable);
-  textoEditable.classList.add("textolargo");
-  textoEditable.textContent = regs[i].textoLargo;
-  //boton editar texto
-  let botonEditarTexto = document.createElement("div");
-  divTextoLargo.appendChild(botonEditarTexto);
-  if (textoEditable.textContent == "") {
-    botonEditarTexto.innerHTML = "Añadir texto largo";
-    textoEditable.classList.add("oculto");
-  } else {
-    botonEditarTexto.innerHTML = "Editar";
-  }
-  botonEditarTexto.classList.add("boton");
-  botonEditarTexto.classList.add("botoneditartexto");
-  botonEditarTexto.addEventListener("click", function () {
-    textoEditable.contentEditable = true;
-    textoEditable.classList.add("textoeditable");
-    textoEditable.classList.remove("oculto");
-    botonEditarTexto.remove();
-    function salirEditar() {
-      botonGuardarTexto.remove();
-      botonNoGuardarTexto.remove();
-      divTextoLargo.appendChild(botonEditarTexto);
-      if (textoEditable.textContent == "") {
-        botonEditarTexto.innerHTML = "Añadir texto largo";
+  //div texto largo
+  let modoEdicion = false;
+  let vacio;
+  crearElemento("divTextoLargo", divDetallado, "div");
+  crearDivTextoLargo();
+  function crearDivTextoLargo() {
+    divTextoLargo.innerHTML = "";
+    vacio = regs[i].textoLargo === "" || regs[i].textoLargo == null;
+    crearElemento("textoEditable", divTextoLargo, "div", regs[i].textoLargo, ["textolargo"]);
+
+    if (modoEdicion == false) {
+      if (vacio) {
         textoEditable.classList.add("oculto");
-      } else {
-        botonEditarTexto.innerHTML = "Editar";
-        textoEditable.classList.remove("textoeditable");
+      }
+      crearElemento("botonEditarTexto", divTextoLargo, "div", vacio ? "Añadir texto largo" : "Editar", ["boton", "botoneditartexto"], function () {
+        modoEdicion = true;
+        crearDivTextoLargo();
+      });
+    } else {
+      textoEditable.contentEditable = true;
+      textoEditable.classList.add("textoeditable");
+      crearElemento("divBotonesEditar",divTextoLargo,"div")
+      crearBotonesEditar()
+      textoEditable.addEventListener("input", crearBotonesEditar);
+      function crearBotonesEditar() {
+        divBotonesEditar.innerHTML=""
+        if (textoEditable.textContent == regs[i].textoLargo) {
+          crearElemento("botonNoEditarTexto", divBotonesEditar, "div", "No editar", ["botonnoeditartexto", "boton"], function () {
+            modoEdicion = false;
+            crearDivTextoLargo();
+          });
+        } else {
+          //boton guardar
+          crearElemento("botonGuardarTexto", divBotonesEditar, "div", "Guardar", ["boton", "botonguardartexto"], function () {
+            modoEdicion = false;
+            regs[i].textoLargo = textoEditable.textContent;
+            guardar();
+            crearDivTextoLargo();
+          });
+          //boton no guardar
+          crearElemento("botonNoGuardarTexto", divBotonesEditar, "div", "No guardar", ["boton", "botonnoguardartexto"], function () {
+            modoEdicion = false;
+            textoEditable.textContent = regs[i].textoLargo;
+            crearDivTextoLargo();
+          });
+        }
       }
     }
-    //boton guardar
-    let botonGuardarTexto = document.createElement("div");
-    divTextoLargo.appendChild(botonGuardarTexto);
-    botonGuardarTexto.innerHTML = "Guardar";
-    botonGuardarTexto.classList.add("boton");
-    botonGuardarTexto.classList.add("botonguardartexto");
-    botonGuardarTexto.addEventListener("click", function () {
-      regs[i].textoLargo = textoEditable.textContent;
-      textoEditable.contentEditable = false;
-      guardar();
-      salirEditar();
-    });
-    //boton no guardar
-    let botonNoGuardarTexto = document.createElement("div");
-    divTextoLargo.appendChild(botonNoGuardarTexto);
-    botonNoGuardarTexto.innerHTML = "No guardar";
-    botonNoGuardarTexto.classList.add("boton");
-    botonNoGuardarTexto.classList.add("botonnoguardartexto");
-    botonNoGuardarTexto.addEventListener("click", function () {
-      textoEditable.textContent = regs[i].textoLargo;
-      textoEditable.contentEditable = false;
-      salirEditar();
-    });
-  });
-
+  }
   //div boton volver
-  let volver = document.createElement("div");
-  divDetallado.appendChild(volver);
-  volver.classList.add("boton");
-  volver.innerHTML = "Volver";
-  volver.classList.add("volver");
-  volver.addEventListener("click", () => {
-    clearInterval()
-    divDetallado.innerHTML = "";
+  crearElemento("volver", divDetallado, "div", "Volver", ["boton", "volver"], () => {
     registroActual = null;
-    crearDivRegistros();
+    inicio();
   });
   //div boton favoritos
-  let toggleFav = document.createElement("div");
-  divDetallado.appendChild(toggleFav);
   let esFav = false;
   for (let f = 0; f < favs.length && esFav == false; f++) {
     if (regs[i].texto == favs[f]) {
@@ -468,40 +255,17 @@ function crearDivDetallado(i) {
       indiceFav = f;
     }
   }
-  if (esFav) {
-    toggleFav.innerHTML = "Favorito";
-    toggleFav.classList.add("esfav");
-  } else {
-    toggleFav.innerHTML = "Añadir";
-    toggleFav.classList.add("noesfav");
-  }
-  toggleFav.classList.add("boton");
-  toggleFav.addEventListener("click", function () {
-    if (esFav) {
-      favs.splice(indiceFav, 1);
-      guardar();
-      crearDivFavoritos();
-      crearDivDetallado(i);
-    } else {
-      favs.unshift(regs[i].texto);
-      guardar();
-      crearDivFavoritos();
-      crearDivDetallado(i);
-    }
+  crearElemento("toggleFav", divDetallado, "div", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
+    esFav ? favs.splice(indiceFav, 1) : favs.unshift(regs[i].texto);
+    guardar();
+    inicio();
   });
   //div boton eliminar
-  let eliminar = document.createElement("div");
-  divDetallado.appendChild(eliminar);
-  eliminar.innerHTML = "Eliminar";
-  eliminar.classList.add("eliminar");
-  eliminar.addEventListener("click", function () {
+  crearElemento("eliminar", divDetallado, "div", "Eliminar", ["eliminar", "boton"], function () {
     if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
-      clearInterval()
-      divDetallado.innerHTML = "";
       eliminarRegistro(i);
     }
   });
-  eliminar.classList.add("boton");
   function mostrarTiempo(indice) {
     let fechaContador = regs[indice].fecha;
     let ahora = new Date();
@@ -513,27 +277,18 @@ function crearDivDetallado(i) {
     segundos %= 60;
     minutos %= 60;
     horas %= 24;
-    return (
-      "Hace " +
-      dias +
-      " días, " +
-      horas.toString().padStart(2, "0") +
-      ":" +
-      minutos.toString().padStart(2, "0") +
-      ":" +
-      segundos.toString().padStart(2, "0")
-    );
+    return "Hace " + dias + " días, " + horas.toString().padStart(2, "0") + ":" + minutos.toString().padStart(2, "0") + ":" + segundos.toString().padStart(2, "0");
   }
   function eliminarRegistro(indiceRegistro) {
     regs.splice(indiceRegistro, 1);
     guardar();
-    crearDivRegistros();
+    registroActual = null;
+    inicio();
   }
 }
 function crearDivRegistros() {
-  divRegistros.innerHTML = "";
-  registroActual = null;
-  dias = [];
+  crearElemento("divRegistros", root, "div");
+  let dias = [];
   function getFechaString(fechaHora) {
     return `${fechaHora.getFullYear()}-${fechaHora.getMonth() + 1}-${fechaHora.getDate()}`;
   }
@@ -554,43 +309,25 @@ function crearDivRegistros() {
   for (let i = 0; i < dias.length; i++) {
     //obtengo el objeto date del día en cuestion
     let diaObj = new Date(dias[i]);
-    //creo un div para el día
-    let dia = document.createElement("div");
-    divRegistros.appendChild(dia);
-    //creo un h2 para mostrar qué día es y lo añado dentro del div del día
-    let tituloDia = document.createElement("h2");
-    dia.appendChild(tituloDia);
-    //añado la clase tituloDia al h2
-    tituloDia.classList.add("tituloDia");
-    //coloco el texto dentro del h2
-    tituloDia.innerHTML = `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${
-      diaObj.getMonth() + 1
-    }`;
-    //asigno la clase día al div que contiene el día
-    dia.classList.add("dia");
-    //asigno al día una clase con el nombre del día de la semana correspondiente
-    dia.classList.add(clasesDias[diaObj.getDay()]);
-    //añado un atributo fecha con la fecha
-    dia.classList.add(dias[i]);
+    crearElemento("dia", divRegistros, "div", undefined, ["dia", clasesDias[diaObj.getDay()], dias[i]]);
+    crearElemento("tituloDia", dia, "h2", `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${diaObj.getMonth() + 1}`, ["tituloDia"]);
   }
   //recorro todos los registros y los meto en su día correspondiente
   for (let i = 0; i < regs.length; i++) {
     //obtener el elemento día correpondiente
     let diaHtml = document.getElementsByClassName(getFechaString(regs[i].fecha));
     //añadir el registro al día
-    let registro = document.createElement("div");
-    diaHtml[0].appendChild(registro);
-    //construir el registro
-    registro.classList.add("registro");
-
-    registro.innerHTML = `${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}: ${regs[i].texto}`;
-    registro.addEventListener("click", function () {
-      divRegistros.innerHTML = "";
-      crearDivDetallado(i);
-    });
+    crearElemento(
+      "registro",
+      diaHtml[0],
+      "div",
+      `${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha.getMinutes().toString().padStart(2, "0")}: ${regs[i].texto}`,
+      ["registro"],
+      function () {
+        divRegistros.innerHTML = "";
+        crearDivDetallado(i);
+      }
+    );
   }
 }
 function duplicados() {
@@ -606,6 +343,21 @@ function duplicados() {
     }
   }
   regs = uniqueArr;
+
+  const uniqueArrF = [];
+  const uniqueObjF = {};
+
+  for (let i = 0; i < favs.length; i++) {
+    const key = favs[i];
+
+    if (!uniqueObjF[key]) {
+      uniqueObjF[key] = true;
+      uniqueArrF.unshift(favs[i]);
+    }
+  }
+
+  favs = uniqueArrF;
+
   ordenar();
   function ordenar() {
     regs = regs.sort(function (a, b) {
@@ -625,20 +377,14 @@ function comprobarJSON(entrada) {
 function iniciar() {
   if (cargar()) {
     console.log("se ha cargado desde iniciar");
-    crearDivMenu();
-    crearDivRegistrar();
-    crearDivFavoritos();
-    crearDivRegistros();
+    inicio();
   } else {
     console.log("crear div descifrar");
     crearDivDescifrar();
   }
 }
 function comprobarPass(p) {
-  if (
-    Decrypt(localStorage.getItem("favoritos"), p) &&
-    Decrypt(localStorage.getItem("registros"), p)
-  ) {
+  if (Decrypt(localStorage.getItem("favoritos"), p) && Decrypt(localStorage.getItem("registros"), p)) {
     console.log("la contraseña está bien");
     return true;
   } else {
@@ -716,9 +462,7 @@ function Decrypt(ciphertext, key = "") {
       console.log("lo ha descifrado");
       salida = bytes.toString(CryptoJS.enc.Utf8);
       if (salida == "") {
-        console.log(
-          "dice que es una cadena vacía y eso es imposible que lo haya cifrado la otra función, toma un array vacío"
-        );
+        console.log("dice que es una cadena vacía y eso es imposible que lo haya cifrado la otra función, toma un array vacío");
         return "[]";
       }
       return salida;
@@ -741,4 +485,53 @@ function portapapeles(elemento) {
   sel.addRange(range);
   document.execCommand("copy");
   sel.removeAllRanges();
+}
+function crearElemento(nombreVariable, padre, tipoElemento, texto, clases, funcionElemento) {
+  const newElement = document.createElement(tipoElemento);
+
+  if (tipoElemento === "input" || tipoElemento === "textarea") {
+    if (texto !== undefined) {
+      newElement.placeholder = texto;
+    }
+    if (typeof funcionElemento === "function") {
+      newElement.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          funcionElemento();
+        }
+      });
+    }
+  } else {
+    if (texto !== undefined) {
+      newElement.textContent = texto;
+    }
+    if (typeof funcionElemento === "function") {
+      newElement.addEventListener("click", funcionElemento);
+    }
+  }
+
+  if (clases !== undefined) {
+    if (!Array.isArray(clases)) {
+      clases = [clases];
+    }
+    newElement.classList.add(...clases);
+  }
+  padre.appendChild(newElement);
+
+  window[nombreVariable] = newElement;
+}
+function inicio() {
+  clearInterval(relojDivDetallado);
+  root.innerHTML = "";
+  crearDivMenu();
+  crearDivRegistrar();
+  if (editarFavoritos) {
+    crearEditarFavs();
+  } else {
+    crearDivFavoritos();
+  }
+  if (registroActual !== null) {
+    crearDivDetallado(registroActual);
+  } else {
+    crearDivRegistros();
+  }
 }

@@ -22,7 +22,7 @@ body {
   background-color: #d9dd12;
   margin-top: 10px;
 }
-#divFavoritos {
+.divfavoritos {
   background-color: #fc9fff;
 }
 .inputnuevofav {
@@ -52,7 +52,7 @@ body {
 }
 .fav {
   display: inline-block;
-  background-color: #f2ab06;
+  background-color: #ffee00;
 }
 .faveliminar {
   display: inline-block;
@@ -89,7 +89,7 @@ body {
   background-color: #5dff78;
   float: right;
 }
-#textoimportar {
+.textoimportar {
   display: block;
   margin: auto;
   margin-top: 15px;
@@ -103,18 +103,17 @@ body {
   word-break: break-word;
 }
 
-#textoimportar:focus {
+.textoimportar:focus {
   outline: none;
 }
-
 
 .textoexportar {
   margin: 15px;
 }
-#divMenu {
+.divmenu {
   background-color: #1f1f1f;
 }
-#contenidomenu {
+.contenidomenu {
   background-color: #353535;
   color: #ffffff;
 }
@@ -125,21 +124,21 @@ body {
 .opcion:hover {
   background-color: #666666;
 }
-#textoregistrar {
+.textoregistrar {
   padding: 10px;
   border-radius: 6px;
 }
-#divRegistrar {
+.divregistrar {
   margin: 7px;
 }
-#botonmenu {
+.botonmenu {
   display: inline-block;
   color: #f0f0f0;
   background-color: #000000;
   padding: 10px;
   cursor: pointer;
 }
-#botonmenu:hover {
+.botonmenu:hover {
   background-color: #363636;
 }
 .registro {
@@ -189,7 +188,7 @@ body {
 .eliminar:hover {
   opacity: 0.5;
 }
-#divDescifrar {
+.divdescifrar {
   text-align: center;
 }
 .textodescifrar.correcto {
@@ -250,6 +249,6 @@ body {
 .botoncifrar {
   padding: 7px;
 }
-#inputcifrar {
+.inputcifrar {
   text-align: center;
 }
