@@ -10,20 +10,20 @@ const root = document.getElementById("root");
 iniciar();
 function crearDivMenu() {
   crearElemento("divMenu", root, "div", undefined, ["divmenu"]);
-  crearElemento("botonMenu", divMenu, "div", "Menu", ["botonmenu"], toggleMenu);
+  crearElemento("botonMenu", divMenu, "button", "Menu", ["botonmenu"], toggleMenu);
   crearElemento("contenidoMenu", divMenu, "div", undefined, ["oculto", "contenidomenu"]);
   function toggleMenu() {
     contenidoMenu.classList.toggle("oculto");
   }
-  crearElemento("opcionCifrar", contenidoMenu, "div", "Cifrar", ["opcion"], crearDivCifrar);
-  crearElemento("opcionExportar", contenidoMenu, "div", "Exportar", ["opcion"], crearDivExportar);
-  crearElemento("opcionImportar", contenidoMenu, "div", "Importar", ["opcion"], crearDivImportar);
+  crearElemento("opcionCifrar", contenidoMenu, "button", "Cifrar", ["opcion"], crearDivCifrar);
+  crearElemento("opcionExportar", contenidoMenu, "button", "Exportar", ["opcion"], crearDivExportar);
+  crearElemento("opcionImportar", contenidoMenu, "button", "Importar", ["opcion"], crearDivImportar);
 }
 function crearDivImportar() {
   root.innerHTML = "";
   crearElemento("divImportar", root, "div", undefined, ["divimportar"]);
   //crear boton de volver
-  crearElemento("volver", divImportar, "div", "Volver", ["boton", "volver"], function () {
+  crearElemento("volver", divImportar, "button", "Volver", ["boton", "volver"], function () {
     inicio();
   });
   crearElemento("botonImportar", divImportar, "div", "Importar", ["boton", "importar"], importar);
@@ -118,7 +118,7 @@ function crearDivRegistrar() {
   crearElemento("divRegistrar", root, "div", undefined, ["divregistrar"]);
   //crear input registrar
   crearElemento("textoRegistrar", divRegistrar, "input", undefined, ["textoregistrar"], nuevoRegistro);
-  crearElemento("botonRegistrar", divRegistrar, "div", "Registrar", ["botonregistrar", "boton"], nuevoRegistro);
+  crearElemento("botonRegistrar", divRegistrar, "button", "Registrar", ["botonregistrar", "boton"], nuevoRegistro);
   function nuevoRegistro() {
     if (textoRegistrar.value) {
       let regNuevo = {};
@@ -133,7 +133,7 @@ function crearDivRegistrar() {
 }
 function crearDivFavoritos() {
   crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
-  crearElemento("editarFavs", divFavoritos, "div", "Editar", ["editarfavs", "boton"], function () {
+  crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
     editarFavoritos = true;
     inicio();
   });
@@ -147,13 +147,13 @@ function crearDivFavoritos() {
 }
 function crearEditarFavs() {
   crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
-  crearElemento("noEditarFavs", divEditarFavoritos, "div", "No editar", ["boton", "noeditarfavs"], function () {
+  crearElemento("noEditarFavs", divEditarFavoritos, "button", "No editar", ["boton", "noeditarfavs"], function () {
     editarFavoritos = false;
     inicio();
   });
   //botones de favoritos guardados
   for (let i = 0; i < favs.length; i++) {
-    crearElemento("favHtml", divEditarFavoritos, "div", favs[i], ["faveliminar", "boton"], function () {
+    crearElemento("favHtml", divEditarFavoritos, "button", favs[i], ["faveliminar", "boton"], function () {
       eliminarFav(i);
     });
   }
@@ -164,7 +164,7 @@ function crearEditarFavs() {
   }
   crearElemento("inputNuevoFav", divEditarFavoritos, "div", undefined, ["inputnuevofav"]);
   crearElemento("textoNuevoFav", inputNuevoFav, "input", "Añadir", ["textonuevofav"], nuevoFav);
-  crearElemento("botonNuevoFav", inputNuevoFav, "div", "Ok", ["submitfav", "boton"], nuevoFav);
+  crearElemento("botonNuevoFav", inputNuevoFav, "button", "Ok", ["submitfav", "boton"], nuevoFav);
   function nuevoFav() {
     if (textoNuevoFav.value) {
       favs.unshift(textoNuevoFav.value);
@@ -196,13 +196,14 @@ function crearDivDetallado(i) {
 
   //div texto largo
   let modoEdicion = false;
-  let vacio;
   crearElemento("divTextoLargo", divDetallado, "div");
   crearDivTextoLargo();
   function crearDivTextoLargo() {
     divTextoLargo.innerHTML = "";
-    vacio = regs[i].textoLargo === "" || regs[i].textoLargo == null;
     crearElemento("textoEditable", divTextoLargo, "div", regs[i].textoLargo, ["textolargo"]);
+    let textoOriginal = textoEditable.textContent;
+    let vacio = textoOriginal == "";
+    console.log("textoOriginal asignado");
 
     if (modoEdicion == false) {
       if (vacio) {
@@ -219,24 +220,24 @@ function crearDivDetallado(i) {
       crearBotonesEditar();
       textoEditable.addEventListener("input", crearBotonesEditar);
       function crearBotonesEditar() {
+        console.log("crear botones editar");
         divBotonesEditar.innerHTML = "";
-        if (regs[i].textoLargo ?? "" == textoEditable.textContent) {
+        if (textoOriginal == textoEditable.textContent) {
           crearElemento("botonNoEditarTexto", divBotonesEditar, "div", "No editar", ["botonnoeditartexto", "boton"], function () {
             modoEdicion = false;
             crearDivTextoLargo();
           });
         } else {
-          //boton guardar
+          console.log("ha cambiado");
           crearElemento("botonGuardarTexto", divBotonesEditar, "div", "Guardar", ["boton", "botonguardartexto"], function () {
-            modoEdicion = false;
             regs[i].textoLargo = textoEditable.textContent;
             guardar();
+            modoEdicion = false;
             crearDivTextoLargo();
           });
-          //boton no guardar
           crearElemento("botonNoGuardarTexto", divBotonesEditar, "div", "No guardar", ["boton", "botonnoguardartexto"], function () {
+            textoEditable.textContent = textoOriginal;
             modoEdicion = false;
-            textoEditable.textContent = regs[i].textoLargo;
             crearDivTextoLargo();
           });
         }
@@ -244,7 +245,7 @@ function crearDivDetallado(i) {
     }
   }
   //div boton volver
-  crearElemento("volver", divDetallado, "div", "Volver", ["boton", "volver"], () => {
+  crearElemento("volver", divDetallado, "button", "Volver", ["boton", "volver"], () => {
     registroActual = null;
     inicio();
   });
@@ -256,13 +257,13 @@ function crearDivDetallado(i) {
       indiceFav = f;
     }
   }
-  crearElemento("toggleFav", divDetallado, "div", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
+  crearElemento("toggleFav", divDetallado, "button", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
     esFav ? favs.splice(indiceFav, 1) : favs.unshift(regs[i].texto);
     guardar();
     inicio();
   });
   //div boton eliminar
-  crearElemento("eliminar", divDetallado, "div", "Eliminar", ["eliminar", "boton"], function () {
+  crearElemento("eliminar", divDetallado, "button", "Eliminar", ["eliminar", "boton"], function () {
     if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
       eliminarRegistro(i);
     }
@@ -278,7 +279,7 @@ function crearDivDetallado(i) {
     segundos %= 60;
     minutos %= 60;
     horas %= 24;
-    return "Hace " + dias + " días, " + horas.toString().padStart(2, "0") + ":" + minutos.toString().padStart(2, "0") + ":" + segundos.toString().padStart(2, "0");
+    return "Hace " + dias + (dias == 1 ? " día " : " días ") + horas.toString().padStart(2, "0") + ":" + minutos.toString().padStart(2, "0") + ":" + segundos.toString().padStart(2, "0");
   }
   function eliminarRegistro(indiceRegistro) {
     regs.splice(indiceRegistro, 1);
