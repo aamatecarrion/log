@@ -26,7 +26,7 @@ body {
   margin-top: 10px;
 }
 .divfavoritos {
-  background-color: #fc9fff;
+  background-color: #fbbdfd;
 }
 .inputnuevofav {
   padding: 7px;
@@ -69,6 +69,10 @@ body {
   padding: 10px;
   margin: 7px;
 }
+.textolargoregistros{
+  color: #5f6368;
+  
+}
 .noesfav:hover {
   background-color: #fbff00;
   opacity: 1;
@@ -80,9 +84,6 @@ body {
 .tituloDia {
   margin: 0px;
   padding: 6px;
-}
-.oculto {
-  display: none;
 }
 .boton.copiar {
   background-color: #5dfaff;
@@ -156,6 +157,9 @@ body {
 .registro {
   padding: 6px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .registro:hover {
   backdrop-filter: brightness(0.9);
@@ -204,20 +208,8 @@ body {
 .divdescifrar {
   text-align: center;
 }
-.textodescifrar.correcto {
-  background-color: #5ff378;
-}
-.textodescifrar.error {
-  background-color: #ff8181;
-}
-.botondescifrar.correcto {
-  background-color: #5ff378;
-}
-.botondescifrar.error {
+.textodescifrar.error,.botondescifrar.error {
   background-color: #ff5050;
-}
-.mensajedescifrar.correcto {
-  color: #00ff00;
 }
 .mensajedescifrar.error {
   color: #ff5050;
@@ -226,7 +218,6 @@ body {
   padding: 9px;
   border-radius: 6px;
 }
-
 .lunes {
   background-color: #fbff00;
 }
@@ -237,7 +228,7 @@ body {
   background-color: #ffc800;
 }
 .jueves {
-  background-color: #ffa6f9;
+  background-color: #fc7474;
 }
 .viernes {
   background-color: #5ff378;
@@ -264,4 +255,25 @@ body {
 }
 .inputcifrar {
   text-align: center;
+}
+.cuadrotextolargo {
+  display: block;
+  border-radius: 6px;
+  width: 95%;
+  margin:auto;
+  
+  height: auto;
+  resize: none;
+  overflow: hidden;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.cuadrotextolargo:focus{
+  outline: none;
+}
+.oculto {
+  display: none;
 }

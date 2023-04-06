@@ -117,13 +117,23 @@ function crearDivCifrar() {
 function crearDivRegistrar() {
   crearElemento("divRegistrar", root, "div", undefined, ["divregistrar"]);
   //crear input registrar
-  crearElemento("textoRegistrar", divRegistrar, "input", undefined, ["textoregistrar"], nuevoRegistro);
+  crearElemento("textoRegistrar", divRegistrar, "input", "texto", ["textoregistrar"], nuevoRegistro);
+  crearElemento("botonDesplegarCuadro", divRegistrar, "button", undefined, ["fa", "fa-chevron-down", "boton"], function () {
+    cuadroTextoLargo.classList.toggle("oculto");
+  });
   crearElemento("botonRegistrar", divRegistrar, "button", "Registrar", ["botonregistrar", "boton"], nuevoRegistro);
+  crearElemento("cuadroTextoLargo", divRegistrar, "textarea", "texto largo", ["cuadrotextolargo", "oculto"]);
+  cuadroTextoLargo.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + 5 + "px";
+  });
+
   function nuevoRegistro() {
     if (textoRegistrar.value) {
       let regNuevo = {};
       regNuevo.fecha = new Date();
       regNuevo.texto = textoRegistrar.value;
+      regNuevo.textoLargo = cuadroTextoLargo.value;
       regs.unshift(regNuevo);
       registroActual = null;
       guardar();
@@ -326,10 +336,11 @@ function crearDivRegistros() {
       `${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha.getMinutes().toString().padStart(2, "0")}: ${regs[i].texto}`,
       ["registro"],
       function () {
-        divRegistros.innerHTML = "";
-        crearDivDetallado(i);
+        registroActual = i;
+        inicio();
       }
     );
+    crearElemento("textoLargoRegistro", registro, "span", typeof regs[i].textoLargo == "undefined" || regs[i].textoLargo == "" ? "" : ` - ${regs[i].textoLargo}`,["textolargoregistros"]);
   }
 }
 function duplicados() {
