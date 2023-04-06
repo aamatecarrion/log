@@ -125,6 +125,7 @@ function crearDivRegistrar() {
       regNuevo.fecha = new Date();
       regNuevo.texto = textoRegistrar.value;
       regs.unshift(regNuevo);
+      registroActual = null;
       guardar();
       inicio();
     }
@@ -214,12 +215,12 @@ function crearDivDetallado(i) {
     } else {
       textoEditable.contentEditable = true;
       textoEditable.classList.add("textoeditable");
-      crearElemento("divBotonesEditar",divTextoLargo,"div")
-      crearBotonesEditar()
+      crearElemento("divBotonesEditar", divTextoLargo, "div");
+      crearBotonesEditar();
       textoEditable.addEventListener("input", crearBotonesEditar);
       function crearBotonesEditar() {
-        divBotonesEditar.innerHTML=""
-        if (textoEditable.textContent == regs[i].textoLargo) {
+        divBotonesEditar.innerHTML = "";
+        if (regs[i].textoLargo ?? "" == textoEditable.textContent) {
           crearElemento("botonNoEditarTexto", divBotonesEditar, "div", "No editar", ["botonnoeditartexto", "boton"], function () {
             modoEdicion = false;
             crearDivTextoLargo();
