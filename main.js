@@ -1,5 +1,6 @@
 let regs = [];
 let favs = [];
+let colores = ["#7d8aff", "#fbff00", "#ff6161", "#ffc800", "#fc7474", "#5ff378", "#ff8080"];
 let pass = "";
 let editarFavoritos = false;
 let registroActual = null;
@@ -18,17 +19,105 @@ function crearDivMenu() {
   crearElemento("opcionCifrar", contenidoMenu, "button", "Cifrar", ["opcion"], crearDivCifrar);
   crearElemento("opcionExportar", contenidoMenu, "button", "Exportar", ["opcion"], crearDivExportar);
   crearElemento("opcionImportar", contenidoMenu, "button", "Importar", ["opcion"], crearDivImportar);
-<<<<<<< HEAD
-=======
-  crearElemento("opcionPersonalizar",contenidoMenu,"button","Personalizar",["opcion"],crearDivPersonalizar)
+  crearElemento("opcionPersonalizar", contenidoMenu, "button", "Personalizar", ["opcion"], crearDivPersonalizar);
 }
-function crearDivPersonalizar(){
-  root.innerHTML="";
+function crearDivPersonalizar() {
+  //este código es una chapuza pero hará el trabajo
+
+  root.innerHTML = "";
+
   //crear boton de volver
-  crearElemento("volver", divImportar, "button", "Volver", ["boton", "volver"], function () {
+  crearElemento("volver",root, "button", "Volver", ["boton", "volver"], function () {
     inicio();
   });
->>>>>>> 3dc7d46 (oki)
+  crearElemento("labellunes", root, "div", "lunes",["divtitulocolordiasemana"]);
+  crearElemento("colorlunes", root, "input", undefined, ["inputcolor"]);
+  colorlunes.type = "color";
+  colorlunes.value=colores[1]
+  labellunes.style="background-color: "+colores[1]
+  colorlunes.addEventListener("change", () => {
+    colores[1]=colorlunes.value
+    labellunes.style="background-color: "+colores[1]
+    guardar()
+  });
+
+
+  crearElemento("labelmartes", root, "div", "martes",["divtitulocolordiasemana"]);
+  crearElemento("colormartes", root, "input", undefined, ["inputcolor"]);
+  colormartes.type = "color";
+  colormartes.value=colores[2]
+  labelmartes.style="background-color: "+colores[2]
+  colormartes.addEventListener("change", () => {
+    colores[2]=colormartes.value
+    labelmartes.style="background-color: "+colores[2]
+    guardar()
+  });
+
+
+
+  crearElemento("labelmiercoles", root, "div", "miercoles",["divtitulocolordiasemana"]);
+  crearElemento("colormiercoles", root, "input", undefined, ["inputcolor"]);
+  colormiercoles.type = "color";
+  colormiercoles.value=colores[3]
+  labelmiercoles.style="background-color: "+colores[3]
+  colormiercoles.addEventListener("change", () => {
+    colores[3]=colormiercoles.value
+    labelmiercoles.style="background-color: "+colores[3]
+    guardar()
+  });
+
+  crearElemento("labeljueves", root, "div", "jueves",["divtitulocolordiasemana"]);
+  crearElemento("colorjueves", root, "input", undefined, ["inputcolor"]);
+  colorjueves.type = "color";
+  colorjueves.value=colores[4]
+  labeljueves.style="background-color: "+colores[4]
+  colorjueves.addEventListener("change", () => {
+    colores[4]=colorjueves.value
+    labeljueves.style="background-color: "+colores[4]
+    guardar()
+  });
+
+
+  crearElemento("labelviernes", root, "div", "viernes",["divtitulocolordiasemana"]);
+  crearElemento("colorviernes", root, "input", undefined, ["inputcolor"]);
+  colorviernes.type = "color";
+  colorviernes.value=colores[5]
+  labelviernes.style="background-color: "+colores[5]
+  colorviernes.addEventListener("change", () => {
+    colores[5]=colorviernes.value
+    labelviernes.style="background-color: "+colores[5]
+    guardar()
+  });
+
+  crearElemento("labelsabado", root, "div", "sabado",["divtitulocolordiasemana"]);
+  crearElemento("colorsabado", root, "input", undefined, ["inputcolor"]);
+  colorsabado.type = "color";
+  colorsabado.value=colores[6]
+  labelsabado.style="background-color: "+colores[6]
+  colorsabado.addEventListener("change", () => {
+    colores[6]=colorsabado.value
+    labelsabado.style="background-color: "+colores[6]
+    guardar()
+  });
+
+
+  crearElemento("labeldomingo", root, "div", "domingo",["divtitulocolordiasemana"]);
+  crearElemento("colordomingo", root, "input", undefined, ["inputcolor"]);
+  colordomingo.type = "color";
+  colordomingo.value=colores[0]
+  labeldomingo.style="background-color: "+colores[0]
+  colordomingo.addEventListener("change", () => {
+    colores[0]=colordomingo.value
+    labeldomingo.style="background-color: "+colores[0]
+    guardar()
+  });
+
+  crearElemento(
+    "agradecimientos",
+    root,
+    "div",
+    "Agradecimientos a Arturo porque inspiró está sección porque decía que él veía los colores de la semana de otra manera, lo cual me obligó a modificar la aplicación haciendo que sean personalizables para que cada persona vea las semanas del color que quiera"
+  );
 }
 function crearDivImportar() {
   root.innerHTML = "";
@@ -333,6 +422,7 @@ function crearDivRegistros() {
     //obtengo el objeto date del día en cuestion
     let diaObj = new Date(dias[i]);
     crearElemento("dia", divRegistros, "div", undefined, ["dia", clasesDias[diaObj.getDay()], dias[i]]);
+    dia.style="background-color:"+colores[diaObj.getDay()]
     crearElemento("tituloDia", dia, "h2", `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${diaObj.getMonth() + 1}`, ["tituloDia"]);
   }
   //recorro todos los registros y los meto en su día correspondiente
@@ -351,7 +441,7 @@ function crearDivRegistros() {
         inicio();
       }
     );
-    crearElemento("textoLargoRegistro", registro, "span", typeof regs[i].textoLargo == "undefined" || regs[i].textoLargo == "" ? "" : ` - ${regs[i].textoLargo}`,["textolargoregistros"]);
+    crearElemento("textoLargoRegistro", registro, "span", typeof regs[i].textoLargo == "undefined" || regs[i].textoLargo == "" ? "" : ` - ${regs[i].textoLargo}`, ["textolargoregistros"]);
   }
 }
 function duplicados() {
@@ -420,6 +510,9 @@ function cargar() {
   if (comprobarPass(pass)) {
     regs = JSON.parse(Decrypt(localStorage.getItem("registros"), pass));
     favs = JSON.parse(Decrypt(localStorage.getItem("favoritos"), pass));
+    if (Decrypt(localStorage.getItem("colores"), pass) !== "[]" && Decrypt(localStorage.getItem("colores"), pass) !== false) {
+      colores = JSON.parse(Decrypt(localStorage.getItem("colores"), pass));
+    }
     for (let i = 0; i < regs.length; i++) {
       regs[i].fecha = new Date(regs[i].fecha);
     }
@@ -433,10 +526,12 @@ function guardar() {
   if (pass == "") {
     localStorage.setItem("favoritos", JSON.stringify(favs));
     localStorage.setItem("registros", JSON.stringify(regs));
+    localStorage.setItem("colores", JSON.stringify(colores));
     console.log("guardado en texto plano");
   } else {
     localStorage.setItem("favoritos", Encrypt(JSON.stringify(favs), pass));
     localStorage.setItem("registros", Encrypt(JSON.stringify(regs), pass));
+    localStorage.setItem("colores", Encrypt(JSON.stringify(colores), pass));
     console.log("guardado cifrado");
   }
 }
