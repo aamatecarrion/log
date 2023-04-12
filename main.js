@@ -18,6 +18,17 @@ function crearDivMenu() {
   crearElemento("opcionCifrar", contenidoMenu, "button", "Cifrar", ["opcion"], crearDivCifrar);
   crearElemento("opcionExportar", contenidoMenu, "button", "Exportar", ["opcion"], crearDivExportar);
   crearElemento("opcionImportar", contenidoMenu, "button", "Importar", ["opcion"], crearDivImportar);
+<<<<<<< HEAD
+=======
+  crearElemento("opcionPersonalizar",contenidoMenu,"button","Personalizar",["opcion"],crearDivPersonalizar)
+}
+function crearDivPersonalizar(){
+  root.innerHTML="";
+  //crear boton de volver
+  crearElemento("volver", divImportar, "button", "Volver", ["boton", "volver"], function () {
+    inicio();
+  });
+>>>>>>> 3dc7d46 (oki)
 }
 function crearDivImportar() {
   root.innerHTML = "";
