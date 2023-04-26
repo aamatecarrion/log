@@ -1,25 +1,87 @@
 let regs = [];
 let favs = [];
-let colores = ["#7d8aff", "#fbff00", "#ff6161", "#ffc800", "#fc7474", "#5ff378", "#ff8080"];
+let colores = [
+  "#7d8aff",
+  "#fbff00",
+  "#ff6161",
+  "#ffc800",
+  "#fc7474",
+  "#5ff378",
+  "#ff8080",
+];
 let pass = "";
 let editarFavoritos = false;
 let registroActual = null;
 let relojDivDetallado;
-const nombresDias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-const clasesDias = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+const nombresDias = [
+  "Domingo",
+  "Lunes",
+  "Martes",
+  "Miércoles",
+  "Jueves",
+  "Viernes",
+  "Sábado",
+];
+const clasesDias = [
+  "domingo",
+  "lunes",
+  "martes",
+  "miercoles",
+  "jueves",
+  "viernes",
+  "sabado",
+];
 const root = document.getElementById("root");
 iniciar();
 function crearDivMenu() {
   crearElemento("divMenu", root, "div", undefined, ["divmenu"]);
-  crearElemento("botonMenu", divMenu, "button", "Menu", ["botonmenu"], toggleMenu);
-  crearElemento("contenidoMenu", divMenu, "div", undefined, ["oculto", "contenidomenu"]);
+  crearElemento(
+    "botonMenu",
+    divMenu,
+    "button",
+    "Menu",
+    ["botonmenu"],
+    toggleMenu
+  );
+  crearElemento("contenidoMenu", divMenu, "div", undefined, [
+    "oculto",
+    "contenidomenu",
+  ]);
   function toggleMenu() {
     contenidoMenu.classList.toggle("oculto");
   }
-  crearElemento("opcionCifrar", contenidoMenu, "button", "Cifrar", ["opcion"], crearDivCifrar);
-  crearElemento("opcionExportar", contenidoMenu, "button", "Exportar", ["opcion"], crearDivExportar);
-  crearElemento("opcionImportar", contenidoMenu, "button", "Importar", ["opcion"], crearDivImportar);
-  crearElemento("opcionPersonalizar", contenidoMenu, "button", "Personalizar", ["opcion"], crearDivPersonalizar);
+  crearElemento(
+    "opcionCifrar",
+    contenidoMenu,
+    "button",
+    "Cifrar",
+    ["opcion"],
+    crearDivCifrar
+  );
+  crearElemento(
+    "opcionExportar",
+    contenidoMenu,
+    "button",
+    "Exportar",
+    ["opcion"],
+    crearDivExportar
+  );
+  crearElemento(
+    "opcionImportar",
+    contenidoMenu,
+    "button",
+    "Importar",
+    ["opcion"],
+    crearDivImportar
+  );
+  crearElemento(
+    "opcionPersonalizar",
+    contenidoMenu,
+    "button",
+    "Personalizar",
+    ["opcion"],
+    crearDivPersonalizar
+  );
 }
 function crearDivPersonalizar() {
   //este código es una chapuza pero hará el trabajo
@@ -27,89 +89,105 @@ function crearDivPersonalizar() {
   root.innerHTML = "";
 
   //crear boton de volver
-  crearElemento("volver",root, "button", "Volver", ["boton", "volver"], function () {
-    inicio();
-  });
-  crearElemento("labellunes", root, "div", "lunes",["divtitulocolordiasemana"]);
+  crearElemento(
+    "volver",
+    root,
+    "button",
+    "Volver",
+    ["boton", "volver"],
+    function () {
+      inicio();
+    }
+  );
+  crearElemento("labellunes", root, "div", "lunes", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colorlunes", root, "input", undefined, ["inputcolor"]);
   colorlunes.type = "color";
-  colorlunes.value=colores[1]
-  labellunes.style="background-color: "+colores[1]
+  colorlunes.value = colores[1];
+  labellunes.style = "background-color: " + colores[1];
   colorlunes.addEventListener("change", () => {
-    colores[1]=colorlunes.value
-    labellunes.style="background-color: "+colores[1]
-    guardar()
+    colores[1] = colorlunes.value;
+    labellunes.style = "background-color: " + colores[1];
+    guardar();
   });
 
-
-  crearElemento("labelmartes", root, "div", "martes",["divtitulocolordiasemana"]);
+  crearElemento("labelmartes", root, "div", "martes", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colormartes", root, "input", undefined, ["inputcolor"]);
   colormartes.type = "color";
-  colormartes.value=colores[2]
-  labelmartes.style="background-color: "+colores[2]
+  colormartes.value = colores[2];
+  labelmartes.style = "background-color: " + colores[2];
   colormartes.addEventListener("change", () => {
-    colores[2]=colormartes.value
-    labelmartes.style="background-color: "+colores[2]
-    guardar()
+    colores[2] = colormartes.value;
+    labelmartes.style = "background-color: " + colores[2];
+    guardar();
   });
 
-
-
-  crearElemento("labelmiercoles", root, "div", "miercoles",["divtitulocolordiasemana"]);
+  crearElemento("labelmiercoles", root, "div", "miercoles", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colormiercoles", root, "input", undefined, ["inputcolor"]);
   colormiercoles.type = "color";
-  colormiercoles.value=colores[3]
-  labelmiercoles.style="background-color: "+colores[3]
+  colormiercoles.value = colores[3];
+  labelmiercoles.style = "background-color: " + colores[3];
   colormiercoles.addEventListener("change", () => {
-    colores[3]=colormiercoles.value
-    labelmiercoles.style="background-color: "+colores[3]
-    guardar()
+    colores[3] = colormiercoles.value;
+    labelmiercoles.style = "background-color: " + colores[3];
+    guardar();
   });
 
-  crearElemento("labeljueves", root, "div", "jueves",["divtitulocolordiasemana"]);
+  crearElemento("labeljueves", root, "div", "jueves", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colorjueves", root, "input", undefined, ["inputcolor"]);
   colorjueves.type = "color";
-  colorjueves.value=colores[4]
-  labeljueves.style="background-color: "+colores[4]
+  colorjueves.value = colores[4];
+  labeljueves.style = "background-color: " + colores[4];
   colorjueves.addEventListener("change", () => {
-    colores[4]=colorjueves.value
-    labeljueves.style="background-color: "+colores[4]
-    guardar()
+    colores[4] = colorjueves.value;
+    labeljueves.style = "background-color: " + colores[4];
+    guardar();
   });
 
-
-  crearElemento("labelviernes", root, "div", "viernes",["divtitulocolordiasemana"]);
+  crearElemento("labelviernes", root, "div", "viernes", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colorviernes", root, "input", undefined, ["inputcolor"]);
   colorviernes.type = "color";
-  colorviernes.value=colores[5]
-  labelviernes.style="background-color: "+colores[5]
+  colorviernes.value = colores[5];
+  labelviernes.style = "background-color: " + colores[5];
   colorviernes.addEventListener("change", () => {
-    colores[5]=colorviernes.value
-    labelviernes.style="background-color: "+colores[5]
-    guardar()
+    colores[5] = colorviernes.value;
+    labelviernes.style = "background-color: " + colores[5];
+    guardar();
   });
 
-  crearElemento("labelsabado", root, "div", "sabado",["divtitulocolordiasemana"]);
+  crearElemento("labelsabado", root, "div", "sabado", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colorsabado", root, "input", undefined, ["inputcolor"]);
   colorsabado.type = "color";
-  colorsabado.value=colores[6]
-  labelsabado.style="background-color: "+colores[6]
+  colorsabado.value = colores[6];
+  labelsabado.style = "background-color: " + colores[6];
   colorsabado.addEventListener("change", () => {
-    colores[6]=colorsabado.value
-    labelsabado.style="background-color: "+colores[6]
-    guardar()
+    colores[6] = colorsabado.value;
+    labelsabado.style = "background-color: " + colores[6];
+    guardar();
   });
 
-
-  crearElemento("labeldomingo", root, "div", "domingo",["divtitulocolordiasemana"]);
+  crearElemento("labeldomingo", root, "div", "domingo", [
+    "divtitulocolordiasemana",
+  ]);
   crearElemento("colordomingo", root, "input", undefined, ["inputcolor"]);
   colordomingo.type = "color";
-  colordomingo.value=colores[0]
-  labeldomingo.style="background-color: "+colores[0]
+  colordomingo.value = colores[0];
+  labeldomingo.style = "background-color: " + colores[0];
   colordomingo.addEventListener("change", () => {
-    colores[0]=colordomingo.value
-    labeldomingo.style="background-color: "+colores[0]
-    guardar()
+    colores[0] = colordomingo.value;
+    labeldomingo.style = "background-color: " + colores[0];
+    guardar();
   });
 
   crearElemento(
@@ -123,10 +201,24 @@ function crearDivImportar() {
   root.innerHTML = "";
   crearElemento("divImportar", root, "div", undefined, ["divimportar"]);
   //crear boton de volver
-  crearElemento("volver", divImportar, "button", "Volver", ["boton", "volver"], function () {
-    inicio();
-  });
-  crearElemento("botonImportar", divImportar, "div", "Importar", ["boton", "importar"], importar);
+  crearElemento(
+    "volver",
+    divImportar,
+    "button",
+    "Volver",
+    ["boton", "volver"],
+    function () {
+      inicio();
+    }
+  );
+  crearElemento(
+    "botonImportar",
+    divImportar,
+    "div",
+    "Importar",
+    ["boton", "importar"],
+    importar
+  );
   function importar() {
     if (comprobarJSON(textoImportar.value)) {
       let importar = JSON.parse(textoImportar.value);
@@ -136,6 +228,7 @@ function crearDivImportar() {
       }
       regs = regs.concat(importar.registros);
       favs = favs.concat(importar.favoritos);
+      colores = importar.colores;
       duplicados();
       guardar();
       alert("Datos importados");
@@ -145,7 +238,13 @@ function crearDivImportar() {
       alert("Los datos no están bien formados");
     }
   }
-  crearElemento("textoImportar", divImportar, "textarea", "Pega aquí tus datos", ["textoimportar"]);
+  crearElemento(
+    "textoImportar",
+    divImportar,
+    "textarea",
+    "Pega aquí tus datos",
+    ["textoimportar"]
+  );
   textoImportar.addEventListener("input", function () {
     this.style.height = "auto";
     this.style.height = this.scrollHeight + 5 + "px";
@@ -154,23 +253,56 @@ function crearDivImportar() {
 function crearDivExportar() {
   root.innerHTML = "";
   crearElemento("divExportar", root, "div", undefined, ["divexportar"]);
-  crearElemento("volver", divExportar, "div", "Volver", ["boton", "volver"], inicio);
+  crearElemento(
+    "volver",
+    divExportar,
+    "div",
+    "Volver",
+    ["boton", "volver"],
+    inicio
+  );
   const exportar = {};
   exportar.registros = regs;
   exportar.favoritos = favs;
-  crearElemento("botonCopiar", divExportar, "div", "Copiar", ["boton", "copiar"], function () {
-    portapapeles(textoExportar);
-    alert("Datos copiados al portapapeles");
-    inicio();
-  });
-  crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), ["textoexportar"]);
+  exportar.colores = colores;
+  crearElemento(
+    "botonCopiar",
+    divExportar,
+    "div",
+    "Copiar",
+    ["boton", "copiar"],
+    function () {
+      portapapeles(textoExportar);
+      alert("Datos copiados al portapapeles");
+      inicio();
+    }
+  );
+  crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), [
+    "textoexportar",
+  ]);
 }
 function crearDivDescifrar() {
   root.innerHTML = "";
   crearElemento("divDescifrar", root, "div", undefined, ["divdescifrar"]);
-  crearElemento("textoDescifrar", divDescifrar, "input", undefined, ["textodescifrar"], descifrar);
-  crearElemento("botonDescifrar", divDescifrar, "div", "Descifrar", ["botondescifrar", "boton"], descifrar);
-  crearElemento("mensajeDescifrar", divDescifrar, "div", undefined, ["mensajedescifrar"]);
+  crearElemento(
+    "textoDescifrar",
+    divDescifrar,
+    "input",
+    undefined,
+    ["textodescifrar"],
+    descifrar
+  );
+  crearElemento(
+    "botonDescifrar",
+    divDescifrar,
+    "div",
+    "Descifrar",
+    ["botondescifrar", "boton"],
+    descifrar
+  );
+  crearElemento("mensajeDescifrar", divDescifrar, "div", undefined, [
+    "mensajedescifrar",
+  ]);
   function descifrar() {
     pass = textoDescifrar.value;
     if (cargar()) {
@@ -195,8 +327,22 @@ function crearDivCifrar() {
   crearElemento("divCifrar", root, "div", undefined, ["divcifrar"]);
   //crear input cifrar
   crearElemento("inputCifrar", divCifrar, "div", undefined, ["inputcifrar"]);
-  crearElemento("textoCifrar", inputCifrar, "input", undefined, ["textocifrar"], cifrar);
-  crearElemento("botonCifrar", inputCifrar, "div", "Cifrar", ["botoncifrar", "boton"], cifrar);
+  crearElemento(
+    "textoCifrar",
+    inputCifrar,
+    "input",
+    undefined,
+    ["textocifrar"],
+    cifrar
+  );
+  crearElemento(
+    "botonCifrar",
+    inputCifrar,
+    "div",
+    "Cifrar",
+    ["botoncifrar", "boton"],
+    cifrar
+  );
   function cifrar() {
     if (pass == "" && textoCifrar.value != "") {
       alert('Se ha establecido la contraseña "' + textoCifrar.value + '"');
@@ -207,7 +353,13 @@ function crearDivCifrar() {
     } else if (pass == textoCifrar.value) {
       alert("La contraseña introducida es la misma que la actual");
     } else if (pass != "" && textoCifrar.value != "") {
-      alert('Se ha cambiado la contraseña de "' + pass + '" a "' + textoCifrar.value + '"');
+      alert(
+        'Se ha cambiado la contraseña de "' +
+          pass +
+          '" a "' +
+          textoCifrar.value +
+          '"'
+      );
     }
     pass = textoCifrar.value;
     guardar();
@@ -217,12 +369,36 @@ function crearDivCifrar() {
 function crearDivRegistrar() {
   crearElemento("divRegistrar", root, "div", undefined, ["divregistrar"]);
   //crear input registrar
-  crearElemento("textoRegistrar", divRegistrar, "input", "texto", ["textoregistrar"], nuevoRegistro);
-  crearElemento("botonDesplegarCuadro", divRegistrar, "button", undefined, ["fa", "fa-chevron-down", "boton"], function () {
-    cuadroTextoLargo.classList.toggle("oculto");
-  });
-  crearElemento("botonRegistrar", divRegistrar, "button", "Registrar", ["botonregistrar", "boton"], nuevoRegistro);
-  crearElemento("cuadroTextoLargo", divRegistrar, "textarea", "texto largo", ["cuadrotextolargo", "oculto"]);
+  crearElemento(
+    "textoRegistrar",
+    divRegistrar,
+    "input",
+    "texto",
+    ["textoregistrar"],
+    nuevoRegistro
+  );
+  crearElemento(
+    "botonDesplegarCuadro",
+    divRegistrar,
+    "button",
+    undefined,
+    ["fa", "fa-chevron-down", "boton"],
+    function () {
+      cuadroTextoLargo.classList.toggle("oculto");
+    }
+  );
+  crearElemento(
+    "botonRegistrar",
+    divRegistrar,
+    "button",
+    "Registrar",
+    ["botonregistrar", "boton"],
+    nuevoRegistro
+  );
+  crearElemento("cuadroTextoLargo", divRegistrar, "textarea", "texto largo", [
+    "cuadrotextolargo",
+    "oculto",
+  ]);
   cuadroTextoLargo.addEventListener("input", function () {
     this.style.height = "auto";
     this.style.height = this.scrollHeight + 5 + "px";
@@ -243,38 +419,82 @@ function crearDivRegistrar() {
 }
 function crearDivFavoritos() {
   crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
-  crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
-    editarFavoritos = true;
-    inicio();
-  });
+  crearElemento(
+    "editarFavs",
+    divFavoritos,
+    "button",
+    "Editar",
+    ["editarfavs", "boton"],
+    function () {
+      editarFavoritos = true;
+      inicio();
+    }
+  );
   //botones de favoritos guardados
   for (let i = 0; i < favs.length; i++) {
     //añadir un botón al cuadro
-    crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function () {
-      textoRegistrar.value = favHtml.textContent;
-    });
+    crearElemento(
+      "favHtml",
+      divFavoritos,
+      "div",
+      favs[i],
+      ["fav", "boton"],
+      function () {
+        textoRegistrar.value = favHtml.textContent;
+      }
+    );
   }
 }
 function crearEditarFavs() {
   crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
-  crearElemento("noEditarFavs", divEditarFavoritos, "button", "No editar", ["boton", "noeditarfavs"], function () {
-    editarFavoritos = false;
-    inicio();
-  });
+  crearElemento(
+    "noEditarFavs",
+    divEditarFavoritos,
+    "button",
+    "No editar",
+    ["boton", "noeditarfavs"],
+    function () {
+      editarFavoritos = false;
+      inicio();
+    }
+  );
   //botones de favoritos guardados
   for (let i = 0; i < favs.length; i++) {
-    crearElemento("favHtml", divEditarFavoritos, "button", favs[i], ["faveliminar", "boton"], function () {
-      eliminarFav(i);
-    });
+    crearElemento(
+      "favHtml",
+      divEditarFavoritos,
+      "button",
+      favs[i],
+      ["faveliminar", "boton"],
+      function () {
+        eliminarFav(i);
+      }
+    );
   }
   function eliminarFav(indiceFav) {
     favs.splice(indiceFav, 1);
     guardar();
     inicio();
   }
-  crearElemento("inputNuevoFav", divEditarFavoritos, "div", undefined, ["inputnuevofav"]);
-  crearElemento("textoNuevoFav", inputNuevoFav, "input", "Añadir", ["textonuevofav"], nuevoFav);
-  crearElemento("botonNuevoFav", inputNuevoFav, "button", "Ok", ["submitfav", "boton"], nuevoFav);
+  crearElemento("inputNuevoFav", divEditarFavoritos, "div", undefined, [
+    "inputnuevofav",
+  ]);
+  crearElemento(
+    "textoNuevoFav",
+    inputNuevoFav,
+    "input",
+    "Añadir",
+    ["textonuevofav"],
+    nuevoFav
+  );
+  crearElemento(
+    "botonNuevoFav",
+    inputNuevoFav,
+    "button",
+    "Ok",
+    ["submitfav", "boton"],
+    nuevoFav
+  );
   function nuevoFav() {
     if (textoNuevoFav.value) {
       favs.unshift(textoNuevoFav.value);
@@ -288,17 +508,33 @@ function crearDivDetallado(i) {
   crearElemento("divDetallado", root, "div", undefined, ["divdetallado"]);
   registroActual = i;
   //crear div de la información del registro
-  crearElemento("tituloRegistro", divDetallado, "h3", `Registro: ${regs[i].texto}`, ["tituloregistro"]);
+  crearElemento(
+    "tituloRegistro",
+    divDetallado,
+    "h3",
+    `Registro: ${regs[i].texto}`,
+    ["tituloregistro"]
+  );
   crearElemento(
     "fechaHoraRegistro",
     divDetallado,
     "div",
-    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${regs[i].fecha.getMonth() + 1}-${regs[i].fecha.getDate()}
-    ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha.getMinutes().toString().padStart(2, "0")}:${regs[i].fecha.getSeconds().toString().padStart(2, "0")}`,
+    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${
+      regs[i].fecha.getMonth() + 1
+    }-${regs[i].fecha.getDate()}
+    ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}:${regs[i].fecha
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     ["fecha"]
   );
   //crear un contador de tiempo
-  crearElemento("contadorTiempo", divDetallado, "div", mostrarTiempo(i), ["contadorTiempo"]);
+  crearElemento("contadorTiempo", divDetallado, "div", mostrarTiempo(i), [
+    "contadorTiempo",
+  ]);
 
   relojDivDetallado = setInterval(function () {
     contadorTiempo.innerHTML = mostrarTiempo(i);
@@ -310,7 +546,9 @@ function crearDivDetallado(i) {
   crearDivTextoLargo();
   function crearDivTextoLargo() {
     divTextoLargo.innerHTML = "";
-    crearElemento("textoEditable", divTextoLargo, "div", regs[i].textoLargo, ["textolargo"]);
+    crearElemento("textoEditable", divTextoLargo, "div", regs[i].textoLargo, [
+      "textolargo",
+    ]);
     let textoOriginal = textoEditable.textContent;
     let vacio = textoOriginal == "";
     console.log("textoOriginal asignado");
@@ -319,10 +557,17 @@ function crearDivDetallado(i) {
       if (vacio) {
         textoEditable.classList.add("oculto");
       }
-      crearElemento("botonEditarTexto", divTextoLargo, "div", vacio ? "Añadir texto largo" : "Editar", ["boton", "botoneditartexto"], function () {
-        modoEdicion = true;
-        crearDivTextoLargo();
-      });
+      crearElemento(
+        "botonEditarTexto",
+        divTextoLargo,
+        "div",
+        vacio ? "Añadir texto largo" : "Editar",
+        ["boton", "botoneditartexto"],
+        function () {
+          modoEdicion = true;
+          crearDivTextoLargo();
+        }
+      );
     } else {
       textoEditable.contentEditable = true;
       textoEditable.classList.add("textoeditable");
@@ -333,32 +578,60 @@ function crearDivDetallado(i) {
         console.log("crear botones editar");
         divBotonesEditar.innerHTML = "";
         if (textoOriginal == textoEditable.textContent) {
-          crearElemento("botonNoEditarTexto", divBotonesEditar, "div", "No editar", ["botonnoeditartexto", "boton"], function () {
-            modoEdicion = false;
-            crearDivTextoLargo();
-          });
+          crearElemento(
+            "botonNoEditarTexto",
+            divBotonesEditar,
+            "div",
+            "No editar",
+            ["botonnoeditartexto", "boton"],
+            function () {
+              modoEdicion = false;
+              crearDivTextoLargo();
+            }
+          );
         } else {
           console.log("ha cambiado");
-          crearElemento("botonGuardarTexto", divBotonesEditar, "div", "Guardar", ["boton", "botonguardartexto"], function () {
-            regs[i].textoLargo = textoEditable.textContent;
-            guardar();
-            modoEdicion = false;
-            crearDivTextoLargo();
-          });
-          crearElemento("botonNoGuardarTexto", divBotonesEditar, "div", "No guardar", ["boton", "botonnoguardartexto"], function () {
-            textoEditable.textContent = textoOriginal;
-            modoEdicion = false;
-            crearDivTextoLargo();
-          });
+          crearElemento(
+            "botonGuardarTexto",
+            divBotonesEditar,
+            "div",
+            "Guardar",
+            ["boton", "botonguardartexto"],
+            function () {
+              regs[i].textoLargo = textoEditable.textContent;
+              guardar();
+              modoEdicion = false;
+              crearDivTextoLargo();
+            }
+          );
+          crearElemento(
+            "botonNoGuardarTexto",
+            divBotonesEditar,
+            "div",
+            "No guardar",
+            ["boton", "botonnoguardartexto"],
+            function () {
+              textoEditable.textContent = textoOriginal;
+              modoEdicion = false;
+              crearDivTextoLargo();
+            }
+          );
         }
       }
     }
   }
   //div boton volver
-  crearElemento("volver", divDetallado, "button", "Volver", ["boton", "volver"], () => {
-    registroActual = null;
-    inicio();
-  });
+  crearElemento(
+    "volver",
+    divDetallado,
+    "button",
+    "Volver",
+    ["boton", "volver"],
+    () => {
+      registroActual = null;
+      inicio();
+    }
+  );
   //div boton favoritos
   let esFav = false;
   for (let f = 0; f < favs.length && esFav == false; f++) {
@@ -367,17 +640,31 @@ function crearDivDetallado(i) {
       indiceFav = f;
     }
   }
-  crearElemento("toggleFav", divDetallado, "button", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
-    esFav ? favs.splice(indiceFav, 1) : favs.unshift(regs[i].texto);
-    guardar();
-    inicio();
-  });
-  //div boton eliminar
-  crearElemento("eliminar", divDetallado, "button", "Eliminar", ["eliminar", "boton"], function () {
-    if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
-      eliminarRegistro(i);
+  crearElemento(
+    "toggleFav",
+    divDetallado,
+    "button",
+    esFav ? "Favorito" : "Añadir",
+    ["boton", esFav ? "esfav" : "noesfav"],
+    function () {
+      esFav ? favs.splice(indiceFav, 1) : favs.unshift(regs[i].texto);
+      guardar();
+      inicio();
     }
-  });
+  );
+  //div boton eliminar
+  crearElemento(
+    "eliminar",
+    divDetallado,
+    "button",
+    "Eliminar",
+    ["eliminar", "boton"],
+    function () {
+      if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
+        eliminarRegistro(i);
+      }
+    }
+  );
   function mostrarTiempo(indice) {
     let fechaContador = regs[indice].fecha;
     let ahora = new Date();
@@ -389,7 +676,16 @@ function crearDivDetallado(i) {
     segundos %= 60;
     minutos %= 60;
     horas %= 24;
-    return "Hace " + dias + (dias == 1 ? " día " : " días ") + horas.toString().padStart(2, "0") + ":" + minutos.toString().padStart(2, "0") + ":" + segundos.toString().padStart(2, "0");
+    return (
+      "Hace " +
+      dias +
+      (dias == 1 ? " día " : " días ") +
+      horas.toString().padStart(2, "0") +
+      ":" +
+      minutos.toString().padStart(2, "0") +
+      ":" +
+      segundos.toString().padStart(2, "0")
+    );
   }
   function eliminarRegistro(indiceRegistro) {
     regs.splice(indiceRegistro, 1);
@@ -402,7 +698,9 @@ function crearDivRegistros() {
   crearElemento("divRegistros", root, "div");
   let dias = [];
   function getFechaString(fechaHora) {
-    return `${fechaHora.getFullYear()}-${fechaHora.getMonth() + 1}-${fechaHora.getDate()}`;
+    return `${fechaHora.getFullYear()}-${
+      fechaHora.getMonth() + 1
+    }-${fechaHora.getDate()}`;
   }
   //añadir los registros al html
   //este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
@@ -421,27 +719,52 @@ function crearDivRegistros() {
   for (let i = 0; i < dias.length; i++) {
     //obtengo el objeto date del día en cuestion
     let diaObj = new Date(dias[i]);
-    crearElemento("dia", divRegistros, "div", undefined, ["dia", clasesDias[diaObj.getDay()], dias[i]]);
-    dia.style="background-color:"+colores[diaObj.getDay()]
-    crearElemento("tituloDia", dia, "h2", `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${diaObj.getMonth() + 1}`, ["tituloDia"]);
+    crearElemento("dia", divRegistros, "div", undefined, [
+      "dia",
+      clasesDias[diaObj.getDay()],
+      dias[i],
+    ]);
+    dia.style = "background-color:" + colores[diaObj.getDay()];
+    crearElemento(
+      "tituloDia",
+      dia,
+      "h2",
+      `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${
+        diaObj.getMonth() + 1
+      }`,
+      ["tituloDia"]
+    );
   }
   //recorro todos los registros y los meto en su día correspondiente
   for (let i = 0; i < regs.length; i++) {
     //obtener el elemento día correpondiente
-    let diaHtml = document.getElementsByClassName(getFechaString(regs[i].fecha));
+    let diaHtml = document.getElementsByClassName(
+      getFechaString(regs[i].fecha)
+    );
     //añadir el registro al día
     crearElemento(
       "registro",
       diaHtml[0],
       "div",
-      `${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha.getMinutes().toString().padStart(2, "0")}: ${regs[i].texto}`,
+      `${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}: ${regs[i].texto}`,
       ["registro"],
       function () {
         registroActual = i;
         inicio();
       }
     );
-    crearElemento("textoLargoRegistro", registro, "span", typeof regs[i].textoLargo == "undefined" || regs[i].textoLargo == "" ? "" : ` - ${regs[i].textoLargo}`, ["textolargoregistros"]);
+    crearElemento(
+      "textoLargoRegistro",
+      registro,
+      "span",
+      typeof regs[i].textoLargo == "undefined" || regs[i].textoLargo == ""
+        ? ""
+        : ` - ${regs[i].textoLargo}`,
+      ["textolargoregistros"]
+    );
   }
 }
 function duplicados() {
@@ -498,7 +821,10 @@ function iniciar() {
   }
 }
 function comprobarPass(p) {
-  if (Decrypt(localStorage.getItem("favoritos"), p) && Decrypt(localStorage.getItem("registros"), p)) {
+  if (
+    Decrypt(localStorage.getItem("favoritos"), p) &&
+    Decrypt(localStorage.getItem("registros"), p)
+  ) {
     console.log("la contraseña está bien");
     return true;
   } else {
@@ -510,7 +836,10 @@ function cargar() {
   if (comprobarPass(pass)) {
     regs = JSON.parse(Decrypt(localStorage.getItem("registros"), pass));
     favs = JSON.parse(Decrypt(localStorage.getItem("favoritos"), pass));
-    if (Decrypt(localStorage.getItem("colores"), pass) !== "[]" && Decrypt(localStorage.getItem("colores"), pass) !== false) {
+    if (
+      Decrypt(localStorage.getItem("colores"), pass) !== "[]" &&
+      Decrypt(localStorage.getItem("colores"), pass) !== false
+    ) {
       colores = JSON.parse(Decrypt(localStorage.getItem("colores"), pass));
     }
     for (let i = 0; i < regs.length; i++) {
@@ -551,7 +880,9 @@ function Encrypt(text, key = "") {
   }
   if (comprobarJSON(text)) {
     let encJson = CryptoJS.AES.encrypt(text, key).toString();
-    let encData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encJson));
+    let encData = CryptoJS.enc.Base64.stringify(
+      CryptoJS.enc.Utf8.parse(encJson)
+    );
     return encData;
   } else {
     console.log("no es un json");
@@ -575,13 +906,17 @@ function Decrypt(ciphertext, key = "") {
     return ciphertext;
   }
   try {
-    let decData = CryptoJS.enc.Base64.parse(ciphertext).toString(CryptoJS.enc.Utf8);
+    let decData = CryptoJS.enc.Base64.parse(ciphertext).toString(
+      CryptoJS.enc.Utf8
+    );
     let bytes = CryptoJS.AES.decrypt(decData, key);
     if (bytes.sigBytes >= 0) {
       console.log("lo ha descifrado");
       salida = bytes.toString(CryptoJS.enc.Utf8);
       if (salida == "") {
-        console.log("dice que es una cadena vacía y eso es imposible que lo haya cifrado la otra función, toma un array vacío");
+        console.log(
+          "dice que es una cadena vacía y eso es imposible que lo haya cifrado la otra función, toma un array vacío"
+        );
         return "[]";
       }
       return salida;
@@ -605,7 +940,14 @@ function portapapeles(elemento) {
   document.execCommand("copy");
   sel.removeAllRanges();
 }
-function crearElemento(nombreVariable, padre, tipoElemento, texto, clases, funcionElemento) {
+function crearElemento(
+  nombreVariable,
+  padre,
+  tipoElemento,
+  texto,
+  clases,
+  funcionElemento
+) {
   const newElement = document.createElement(tipoElemento);
 
   if (tipoElemento === "input" || tipoElemento === "textarea") {
