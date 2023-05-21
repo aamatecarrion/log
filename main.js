@@ -704,7 +704,7 @@ function crearDivRegistros() {
   }
   //añadir los registros al html
   //este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
-  for (let i = 0; i < regs.length; i++) {
+  /* for (let i = 0; i < regs.length; i++) {
     let existe = false;
     for (let j = 0; j < dias.length && existe == false; j++) {
       if (dias[j] === getFechaString(regs[i].fecha)) {
@@ -714,7 +714,20 @@ function crearDivRegistros() {
     if (!existe) {
       dias.push(getFechaString(regs[i].fecha));
     }
+  } */
+
+  //voy a hacerlo a lo loco y en vez de obtener solo los días que tienen registros
+  // o un calendario desde el primer registro hasta hoy voy a hacerlo en plan hard code 
+  // para que se muestre un calendario de colores desde 2022 por ejemplo
+
+  let diaInicio = new Date("2022")
+  let diaFin = new Date()
+  let diaBucle = diaFin;
+  while (diaBucle >= diaInicio){
+    dias.push(getFechaString(diaBucle));
+    diaBucle.setDate(diaBucle.getDate()-1)
   }
+
   //recorro el array de días
   for (let i = 0; i < dias.length; i++) {
     //obtengo el objeto date del día en cuestion
