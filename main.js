@@ -355,10 +355,10 @@ function crearDivCifrar() {
     } else if (pass != "" && textoCifrar.value != "") {
       alert(
         'Se ha cambiado la contraseña de "' +
-        pass +
-        '" a "' +
-        textoCifrar.value +
-        '"'
+          pass +
+          '" a "' +
+          textoCifrar.value +
+          '"'
       );
     }
     pass = textoCifrar.value;
@@ -519,15 +519,16 @@ function crearDivDetallado(i) {
     "fechaHoraRegistro",
     divDetallado,
     "div",
-    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${regs[i].fecha.getMonth() + 1
+    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${
+      regs[i].fecha.getMonth() + 1
     }-${regs[i].fecha.getDate()}
     ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
       .getMinutes()
       .toString()
       .padStart(2, "0")}:${regs[i].fecha
-        .getSeconds()
-        .toString()
-        .padStart(2, "0")}`,
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`,
     ["fecha"]
   );
   //crear un contador de tiempo
@@ -695,12 +696,15 @@ function crearDivDetallado(i) {
 }
 function crearDivRegistros() {
   crearElemento("divRegistros", root, "div");
+  let dias = [];
   function getFechaString(fechaHora) {
-    return fechaHora.toISOString().split('T')[0];
+    return `${fechaHora.getFullYear()}-${
+      fechaHora.getMonth() + 1
+    }-${fechaHora.getDate()}`;
   }
   //añadir los registros al html
   //este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
-  /*   for (let i = 0; i < regs.length; i++) {
+  for (let i = 0; i < regs.length; i++) {
     let existe = false;
     for (let j = 0; j < dias.length && existe == false; j++) {
       if (dias[j] === getFechaString(regs[i].fecha)) {
@@ -710,36 +714,23 @@ function crearDivRegistros() {
     if (!existe) {
       dias.push(getFechaString(regs[i].fecha));
     }
-  } */
-  //el código de arriba lo comento y hago que la lista de días que se muestren vaya desde
-  //el primer registro hasta el día actual creando un array de días aunque esten vaciós para hacer
-  //como un calendario gigante de colores y poder ver los días en los que no ha habido registros
-  //y tener una visión más real del tiempo
-
-  let dias = [];
-  let fechaActual = new Date();
-  let fechaActualTemp = regs[regs.length-1].fecha;
-  // Recorrer desde la fecha inicial hasta la fecha actual
-  while (fechaActualTemp <= fechaActual) {
-    // Agregar la fecha al array
-    dias.push(fechaActualTemp);
-    // Incrementar un día
-    fechaActualTemp.setDate(fechaActualTemp.getDate() + 1);
   }
-
   //recorro el array de días
   for (let i = 0; i < dias.length; i++) {
+    //obtengo el objeto date del día en cuestion
+    let diaObj = new Date(dias[i]);
     crearElemento("dia", divRegistros, "div", undefined, [
       "dia",
-      clasesDias[dias[i].getDay()],
+      clasesDias[diaObj.getDay()],
       dias[i],
     ]);
-    dia.style = "background-color:" + colores[dias[i].getDay()];
+    dia.style = "background-color:" + colores[diaObj.getDay()];
     crearElemento(
       "tituloDia",
       dia,
       "h2",
-      `${nombresDias[dias[i].getDay()]} ${dias[i].getDate()}-${dias[i].getMonth() + 1
+      `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${
+        diaObj.getMonth() + 1
       }`,
       ["tituloDia"]
     );
