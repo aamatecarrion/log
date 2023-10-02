@@ -355,10 +355,10 @@ function crearDivCifrar() {
     } else if (pass != "" && textoCifrar.value != "") {
       alert(
         'Se ha cambiado la contraseña de "' +
-          pass +
-          '" a "' +
-          textoCifrar.value +
-          '"'
+        pass +
+        '" a "' +
+        textoCifrar.value +
+        '"'
       );
     }
     pass = textoCifrar.value;
@@ -418,32 +418,19 @@ function crearDivRegistrar() {
   }
 }
 function crearDivFavoritos() {
-  crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
-  crearElemento(
-    "editarFavs",
-    divFavoritos,
-    "button",
-    "Editar",
-    ["editarfavs", "boton"],
-    function () {
-      editarFavoritos = true;
-      inicio();
-    }
-  );
-  //botones de favoritos guardados
-  for (let i = 0; i < favs.length; i++) {
-    //añadir un botón al cuadro
-    crearElemento(
-      "favHtml",
-      divFavoritos,
-      "div",
-      favs[i],
-      ["fav", "boton"],
-      function () {
-        textoRegistrar.value = favHtml.textContent;
-      }
-    );
-  }
+	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
+	crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
+		editarFavoritos = true;
+		inicio();
+	});
+	//botones de favoritos guardados
+	for (let i = 0; i < favs.length; i++) {
+		//añadir un botón al cuadro
+		crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function (e) {
+			console.log(e.srcElement.innerText);
+			textoRegistrar.value = e.srcElement.innerText;
+		});
+	}
 }
 function crearEditarFavs() {
   crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
@@ -519,16 +506,15 @@ function crearDivDetallado(i) {
     "fechaHoraRegistro",
     divDetallado,
     "div",
-    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${
-      regs[i].fecha.getMonth() + 1
+    `${nombresDias[regs[i].fecha.getDay()]} ${regs[i].fecha.getFullYear()}-${regs[i].fecha.getMonth() + 1
     }-${regs[i].fecha.getDate()}
     ${regs[i].fecha.getHours().toString().padStart(2, "0")}:${regs[i].fecha
       .getMinutes()
       .toString()
       .padStart(2, "0")}:${regs[i].fecha
-      .getSeconds()
-      .toString()
-      .padStart(2, "0")}`,
+        .getSeconds()
+        .toString()
+        .padStart(2, "0")}`,
     ["fecha"]
   );
   //crear un contador de tiempo
@@ -698,9 +684,8 @@ function crearDivRegistros() {
   crearElemento("divRegistros", root, "div");
   let dias = [];
   function getFechaString(fechaHora) {
-    return `${fechaHora.getFullYear()}-${
-      fechaHora.getMonth() + 1
-    }-${fechaHora.getDate()}`;
+    return `${fechaHora.getFullYear()}-${fechaHora.getMonth() + 1
+      }-${fechaHora.getDate()}`;
   }
   //añadir los registros al html
   //este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
@@ -723,9 +708,9 @@ function crearDivRegistros() {
   let diaInicio = new Date("2022")
   let diaFin = new Date()
   let diaBucle = diaFin;
-  while (diaBucle >= diaInicio){
+  while (diaBucle >= diaInicio) {
     dias.push(getFechaString(diaBucle));
-    diaBucle.setDate(diaBucle.getDate()-1)
+    diaBucle.setDate(diaBucle.getDate() - 1)
   }
 
   //recorro el array de días
@@ -742,8 +727,7 @@ function crearDivRegistros() {
       "tituloDia",
       dia,
       "h2",
-      `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${
-        diaObj.getMonth() + 1
+      `${nombresDias[diaObj.getDay()]} ${diaObj.getDate()}-${diaObj.getMonth() + 1
       }`,
       ["tituloDia"]
     );
