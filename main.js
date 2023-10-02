@@ -565,7 +565,6 @@ function comprobarPass(p) {
 	}
 }
 function cargar() {
-	cargar_php()
 	if (comprobarPass(pass)) {
 		regs = JSON.parse(Decrypt(localStorage.getItem("registros"), pass));
 		favs = JSON.parse(Decrypt(localStorage.getItem("favoritos"), pass));
@@ -583,7 +582,7 @@ function cargar() {
 		return false;
 	}
 }
-function cargar_php() {
+/* function cargar_php() {
 	const url = "http://192.168.1.32/index.php";
 	const opciones = {
 		method: "POST",
@@ -616,7 +615,7 @@ function cargar_php() {
 			console.error("Error:", error);
 		});
 
-}
+} */
 function guardar() {
 	if (pass == "") {
 		localStorage.setItem("favoritos", JSON.stringify(favs));
@@ -629,7 +628,7 @@ function guardar() {
 		localStorage.setItem("colores", Encrypt(JSON.stringify(colores), pass));
 		console.log("guardado cifrado");
 	}
-	const url = "http://192.168.1.32/index.php";
+	/* const url = "http://192.168.1.32/index.php";
 	const opciones = {
 		method: "POST",
 		headers: {
@@ -646,7 +645,7 @@ function guardar() {
 		.catch((error) => {
 			// Manejar errores de la solicitud
 			console.error("Error:", error);
-		});
+		}); */
 
 }
 
