@@ -226,8 +226,7 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud = "0";
-			regNuevo.longitud = "0";
+			
 			if ("geolocation" in navigator) {
 				navigator.geolocation.getCurrentPosition(
 					function (position) {
@@ -396,7 +395,7 @@ function crearDivDetallado(i) {
 	let mapDiv = document.querySelector(".mapa"); // Selecciona el elemento por clase
 
 	// Crear el mapa Leaflet utilizando el elemento <div> como contenedor
-	let map = L.map(mapDiv).setView([regs[i].latitud, regs[i].longitud], 15);
+	let map = L.map(mapDiv).setView([regs[i].latitud, regs[i].longitud], 13);
 
 	// Agregar la capa de mapeo de OpenStreetMap al mapa
 	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
