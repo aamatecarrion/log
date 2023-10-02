@@ -410,6 +410,21 @@ function crearDivRegistrar() {
       regNuevo.fecha = new Date();
       regNuevo.texto = textoRegistrar.value;
       regNuevo.textoLargo = cuadroTextoLargo.value;
+      regNuevo.latitud = "0";
+      regNuevo.longitud = "0";
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const latitud = position.coords.latitude;
+            const longitud = position.coords.longitude;
+            regNuevo.latitud = latitud;
+            regNuevo.longitud = longitud;
+          },
+          function (error) {
+            console.log("error");
+          }
+        );
+      }
       regs.unshift(regNuevo);
       registroActual = null;
       guardar();
@@ -418,19 +433,19 @@ function crearDivRegistrar() {
   }
 }
 function crearDivFavoritos() {
-	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
-	crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
-		editarFavoritos = true;
-		inicio();
-	});
-	//botones de favoritos guardados
-	for (let i = 0; i < favs.length; i++) {
-		//añadir un botón al cuadro
-		crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function (e) {
-			console.log(e.srcElement.innerText);
-			textoRegistrar.value = e.srcElement.innerText;
-		});
-	}
+  crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
+  crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
+    editarFavoritos = true;
+    inicio();
+  });
+  //botones de favoritos guardados
+  for (let i = 0; i < favs.length; i++) {
+    //añadir un botón al cuadro
+    crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function (e) {
+      console.log(e.srcElement.innerText);
+      textoRegistrar.value = e.srcElement.innerText;
+    });
+  }
 }
 function crearEditarFavs() {
   crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
@@ -606,6 +621,38 @@ function crearDivDetallado(i) {
       }
     }
   }
+  // Crear el elemento <div> que servirá como el contenedor del mapa
+  crearElemento("divMapa", divDetallado, "div", undefined, "mapa");
+
+  // Configurar el estilo del elemento <div>
+  let mapDiv = document.querySelector(".mapa"); // Selecciona el elemento por clase
+  mapDiv.style.height = "400px";
+  mapDiv.style.width = "90%";
+  mapDiv.style.margin = "auto";
+  divDetallado.padding = "0px 100px";
+
+
+  // Crear el mapa Leaflet utilizando el elemento <div> como contenedor
+  let map = L.map(mapDiv).setView([37.6058348, -0.9899902], 12);
+
+  // Agregar la capa de mapeo de OpenStreetMap al mapa
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  // Agregar un marcador al mapa (asegúrate de que regs[i].latitud y regs[i].longitud estén definidos)
+  let marker = L.marker([regs[i].latitud, regs[i].longitud]).addTo(map);
+
+  // Crear el contenido del popup (asegúrate de que evento.nombre y evento.fechaHora estén definidos)
+  let popupContent = `
+    <h3>${regs[i].nombre}</h3>
+    <p>${regs[i].fechaHora}</p>
+`;
+
+  // Vincular el contenido del popup al marcador y abrir el popup
+  marker.bindPopup(popupContent);
+  marker.openPopup();
+
   //div boton volver
   crearElemento(
     "volver",
