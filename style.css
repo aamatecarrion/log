@@ -169,10 +169,15 @@ body {
 }
 .divdetallado {
   background-color: #f4dc72;
-  padding-bottom: 20px;
+  padding-bottom: 5px;
 }
 .divdetallado > * {
   padding: 10px;
+}
+.mapa {
+  height: 400px;
+  margin: 2%;
+
 }
 .tituloregistro {
   margin: 0px;

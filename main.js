@@ -313,6 +313,7 @@ function crearDivDetallado(i) {
 	relojDivDetallado = setInterval(function () {
 		contadorTiempo.innerHTML = mostrarTiempo(i);
 	}, 200);
+	crearElemento("coordenadas", divDetallado, "div", regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
 
 	//div texto largo
 	let modoEdicion = false;
@@ -393,10 +394,6 @@ function crearDivDetallado(i) {
 
 	// Configurar el estilo del elemento <div>
 	let mapDiv = document.querySelector(".mapa"); // Selecciona el elemento por clase
-	mapDiv.style.height = "400px";
-	mapDiv.style.width = "90%";
-	mapDiv.style.margin = "auto";
-	divDetallado.padding = "0px 100px";
 
 	// Crear el mapa Leaflet utilizando el elemento <div> como contenedor
 	let map = L.map(mapDiv).setView([regs[i].latitud, regs[i].longitud], 13);
@@ -408,11 +405,23 @@ function crearDivDetallado(i) {
 
 	// Agregar un marcador al mapa (asegúrate de que regs[i].latitud y regs[i].longitud estén definidos)
 	let marker = L.marker([regs[i].latitud, regs[i].longitud]).addTo(map);
+	const fecha = regs[i].fecha // Puedes reemplazar esto con tu objeto Date
+
+	// Obtenemos los componentes de fecha y hora
+	const año = fecha.getFullYear();
+	const mes = String(fecha.getMonth() + 1).padStart(2, "0"); // Sumamos 1 al mes ya que los meses se indexan desde 0
+	const dia = String(fecha.getDate()).padStart(2, "0");
+	const hora = String(fecha.getHours()).padStart(2, "0");
+	const minutos = String(fecha.getMinutes()).padStart(2, "0");
+	const segundos = String(fecha.getSeconds()).padStart(2, "0");
+
+	// Construimos la cadena en el formato deseado
+	const fechaHoraFormateada = `${año}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
 
 	// Crear el contenido del popup (asegúrate de que evento.nombre y evento.fechaHora estén definidos)
 	let popupContent = `
-    <h3>${regs[i].nombre}</h3>
-    <p>${regs[i].fechaHora}</p>
+    <h3>${regs[i].texto}</h3>
+    <p>${fechaHoraFormateada}</p>
 `;
 
 	// Vincular el contenido del popup al marcador y abrir el popup
