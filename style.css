@@ -169,6 +169,7 @@ body {
 }
 .divdetallado {
   background-color: #f4dc72;
+  padding-bottom: 20px;
 }
 .divdetallado > * {
   padding: 10px;
