@@ -226,11 +226,13 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
+			var latitud;
+			var longitud;
 			if ("geolocation" in navigator) {
 				navigator.geolocation.getCurrentPosition(
 					function (position) {
-						var latitud = position.coords.latitude;
-						var longitud = position.coords.longitude;
+						latitud = position.coords.latitude;
+						longitud = position.coords.longitude;
 					},
 					function (error) {
 						console.log("error");
