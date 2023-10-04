@@ -228,7 +228,6 @@ function crearDivRegistrar() {
 			regNuevo.textoLargo = cuadroTextoLargo.value;
 			regNuevo.latitud=0;
 			regNuevo.longitud=0;
-			do {
 				if ("geolocation" in navigator) {
 					navigator.geolocation.getCurrentPosition(
 						function (position) {
@@ -242,10 +241,20 @@ function crearDivRegistrar() {
 						}
 					);
 				}
-			} while (regNuevo.latitud === 0 || regNuevo.longitud === 0)
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
+			guardar();
 			guardar();
 			inicio();
 			registroActual = null;
