@@ -219,45 +219,53 @@ function crearDivRegistrar() {
 		this.style.height = "auto";
 		this.style.height = this.scrollHeight + 5 + "px";
 	});
-	crearElemento("subir", root, "input", "Subir", ["boton", "subir"], leerArchivo);
+	crearElemento("subir", root, "input", "Subir", ["boton", "subir"], leerArchivos);
 	subir.type = "file"
 	subir.id = "fileInput"
 	subir.accept = ".txt"
 	crearElemento("contenido", root, "div", undefined, ["subir"])
-	function leerArchivo() {
+	async function leerArchivos() {
 		const fileInput = document.getElementById("fileInput");
 		const contenidoArchivo = document.getElementById("contenidoArchivo");
-
-		const file = fileInput.files[0];
-
-		if (file) {
+		const files = fileInput.files;
+	
+		if (files.length === 0) {
+			contenidoArchivo.textContent = "Por favor, selecciona al menos un archivo.";
+			return;
+		}
+	
+		for (let i = 0; i < files.length; i++) {
+			const file = files[i];
 			const reader = new FileReader();
-
-			reader.onload = function (e) {
-				const contenido = e.target.result;
-				contenidoArchivo.textContent = contenido;
-			};
-			if (comprobarJSON(contenidoArchivo)) {
-				let importar = JSON.parse(contenidoArchivo);
-				console.log(importar);
-				for (let i = 0; i < importar.registros.length; i++) {
-					importar.registros[i].fecha = new Date(importar.registros[i].fecha);
-				}
-				regs = regs.concat(importar.registros);
-				favs = favs.concat(importar.favoritos);
-				colores = importar.colores;
-				duplicados();
-				guardar();
-			} else if (contenidoArchivo == "") {
-				console.log("vacio");
-			} else {
-				alert("Los datos no están bien formados");
-			}
-			reader.readAsText(file);
-		} else {
-			contenidoArchivo.textContent = "Por favor, selecciona un archivo primero.";
+	
+			await new Promise((resolve) => {
+				reader.onload = function (e) {
+					const contenido = e.target.result;
+					contenidoArchivo.textContent = contenido;
+	
+					if (comprobarJSON(contenidoArchivo)) {
+						let importar = JSON.parse(contenidoArchivo);
+						console.log(importar);
+						for (let i = 0; i < importar.registros.length; i++) {
+							importar.registros[i].fecha = new Date(importar.registros[i].fecha);
+						}
+						regs = regs.concat(importar.registros);
+						favs = favs.concat(importar.favoritos);
+						colores = importar.colores;
+						duplicados();
+						guardar();
+					} else if (contenidoArchivo == "") {
+						console.log("vacio");
+					} else {
+						alert("Los datos no están bien formados");
+					}
+					resolve();
+				};
+				reader.readAsText(file);
+			});
 		}
 	}
+	
 	crearElemento("descargar",root,"div","Descargar","descargar",descargarArchivoDeTexto)
 	function descargarArchivoDeTexto() {
 		// Contenido del archivo de texto
