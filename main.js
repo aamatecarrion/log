@@ -226,27 +226,30 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud="0"
-			regNuevo.longitud="0"
-			if ("geolocatioren" in navigator) {
-				navigator.geolocation.getCurrentPosition(
-					function (position) {
-						let latitud = position.coords.latitude;
-						let longitud = position.coords.longitude;
-						regNuevo.latitud = latitud;
-						regNuevo.longitud = longitud;
-					},
-					function (error) {
-						console.log("error");
-					}
-				);
-			}
+			regNuevo.latitud = navigator.geolocation.getCurrentPosition(
+				function (position) {
+					return position.coords.latitude;
+					
+				},
+				function (error) {
+					console.log("error");
+				}
+			);
+			regNuevo.longitud = navigator.geolocation.getCurrentPosition(
+				function (position) {
+					return position.coords.longitude;
+					
+				},
+				function (error) {
+					console.log("error");
+				}
+			);
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
-			registroActual = null;
 			guardar();
 			inicio();
+			registroActual = null;
 		}
 	}
 }
@@ -457,15 +460,15 @@ function crearDivRegistros() {
 	//añadir los registros al html
 	//este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
 	/* for (let i = 0; i < regs.length; i++) {
-    let existe = false;
-    for (let j = 0; j < dias.length && existe == false; j++) {
-      if (dias[j] === getFechaString(regs[i].fecha)) {
-        existe = true;
-      }
-    }
-    if (!existe) {
-      dias.push(getFechaString(regs[i].fecha));
-    }
+	let existe = false;
+	for (let j = 0; j < dias.length && existe == false; j++) {
+	  if (dias[j] === getFechaString(regs[i].fecha)) {
+		existe = true;
+	  }
+	}
+	if (!existe) {
+	  dias.push(getFechaString(regs[i].fecha));
+	}
   } */
 
 	//voy a hacerlo a lo loco y en vez de obtener solo los días que tienen registros
