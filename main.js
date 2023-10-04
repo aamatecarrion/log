@@ -219,33 +219,104 @@ function crearDivRegistrar() {
 		this.style.height = "auto";
 		this.style.height = this.scrollHeight + 5 + "px";
 	});
+	crearElemento("subir", root, "input", "Subir", ["boton", "subir"], leerArchivo);
+	subir.type = "file"
+	subir.id = "fileInput"
+	subir.accept = ".txt"
+	crearElemento("contenido", root, "div", undefined, ["subir"])
+	function leerArchivo() {
+		const fileInput = document.getElementById("fileInput");
+		const contenidoArchivo = document.getElementById("contenidoArchivo");
+
+		const file = fileInput.files[0];
+
+		if (file) {
+			const reader = new FileReader();
+
+			reader.onload = function (e) {
+				const contenido = e.target.result;
+				contenidoArchivo.textContent = contenido;
+			};
+			if (comprobarJSON(contenidoArchivo)) {
+				let importar = JSON.parse(contenidoArchivo);
+				console.log(importar);
+				for (let i = 0; i < importar.registros.length; i++) {
+					importar.registros[i].fecha = new Date(importar.registros[i].fecha);
+				}
+				regs = regs.concat(importar.registros);
+				favs = favs.concat(importar.favoritos);
+				colores = importar.colores;
+				duplicados();
+				guardar();
+			} else if (contenidoArchivo == "") {
+				console.log("vacio");
+			} else {
+				alert("Los datos no están bien formados");
+			}
+			reader.readAsText(file);
+		} else {
+			contenidoArchivo.textContent = "Por favor, selecciona un archivo primero.";
+		}
+	}
+	crearElemento("descargar",root,"div","Descargar","descargar",descargarArchivoDeTexto)
+	function descargarArchivoDeTexto() {
+		// Contenido del archivo de texto
+		root.innerHTML = "";
+		crearElemento("divExportar", root, "div", undefined, ["divexportar"]);
+		const exportar = {};
+		exportar.registros = regs;
+		exportar.favoritos = favs;
+		exportar.colores = colores;
+		crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), ["textoexportar"]);
+		const contenido = JSON.stringify(exportar)
+
+		// Crear un elemento <a> para el enlace de descarga
+		const enlace = document.createElement("a");
+		enlace.href = "data:text/plain;charset=utf-8," + encodeURIComponent(contenido);
+		enlace.download = "log.txt";
+
+		// Simular un clic en el enlace para iniciar la descarga
+		enlace.style.display = "none";
+		document.body.appendChild(enlace);
+		enlace.click();
+		document.body.removeChild(enlace);
+		inicio();
+	}
+
+
 
 	function nuevoRegistro() {
 		let regNuevo = {};
 
 		if (textoRegistrar.value) {
+			let regNuevo = {};
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			navigator.geolocation.getCurrentPosition(
-				function (position) {
-					let latitud = position.coords.latitude;
-					let longitud = position.coords.longitude;
-					regNuevo.latitud = latitud;
-					regNuevo.longitud = longitud;
-				},
-				function (error) {
-					console.log(error);
-				}
-			);
+			regNuevo.latitud="0"
+			regNuevo.longitud="0"
+			if ("geolocatioren" in navigator) {
+				navigator.geolocation.getCurrentPosition(
+					function (position) {
+						let latitud = position.coords.latitude;
+						let longitud = position.coords.longitude;
+						regNuevo.latitud = latitud;
+						regNuevo.longitud = longitud;
+					},
+					function (error) {
+						console.log("error");
+					}
+				);
+			}
+			if (regs) {
+				regs.unshift(regNuevo);
+			}
+			registroActual = null;
+			guardar();
+			inicio();
 		}
-		regs.unshift(regNuevo);
-		registroActual = null;
-		guardar();
-		inicio();
 	}
 }
-
 function crearDivFavoritos() {
 	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
 	crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
@@ -309,7 +380,9 @@ function crearDivDetallado(i) {
 	relojDivDetallado = setInterval(function () {
 		contadorTiempo.innerHTML = mostrarTiempo(i);
 	}, 200);
-	crearElemento("coordenadas", divDetallado, "div", regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
+	crearElemento("coordenadas", divDetallado, "a", regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
+	coordenadas.href = "https://www.google.es/maps/@" + regs[i].latitud + "," + regs[i].longitud + ",17z?entry=ttu"
+
 
 	//div texto largo
 	let modoEdicion = false;
@@ -361,10 +434,14 @@ function crearDivDetallado(i) {
 			}
 		}
 	}
-	//div boton volver
-	crearElemento("volver", divDetallado, "button", "Volver", ["boton", "volver"], () => {
-		registroActual = null;
-		inicio();
+	//div botones
+	crearElemento("botones", divDetallado, "div", undefined, ["botones"]);
+
+	//div boton eliminar
+	crearElemento("eliminar", botones, "button", "Eliminar", ["eliminar", "boton"], function () {
+		if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
+			eliminarRegistro(i);
+		}
 	});
 	//div boton favoritos
 	let esFav = false;
@@ -374,16 +451,15 @@ function crearDivDetallado(i) {
 			indiceFav = f;
 		}
 	}
-	crearElemento("toggleFav", divDetallado, "button", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
+	crearElemento("toggleFav", botones, "button", esFav ? "Favorito" : "Añadir", ["boton", esFav ? "esfav" : "noesfav"], function () {
 		esFav ? favs.splice(indiceFav, 1) : favs.unshift(regs[i].texto);
 		guardar();
 		inicio();
 	});
-	//div boton eliminar
-	crearElemento("eliminar", divDetallado, "button", "Eliminar", ["eliminar", "boton"], function () {
-		if (window.confirm('Eliminar el registro "' + regs[i].texto + '"?')) {
-			eliminarRegistro(i);
-		}
+	//div boton volver
+	crearElemento("volver", botones, "button", "Volver", ["boton", "volver"], () => {
+		registroActual = null;
+		inicio();
 	});
 	// Crear el elemento <div> que servirá como el contenedor del mapa
 	crearElemento("divMapa", divDetallado, "div", undefined, "mapa");
@@ -392,7 +468,7 @@ function crearDivDetallado(i) {
 	let mapDiv = document.querySelector(".mapa"); // Selecciona el elemento por clase
 
 	// Crear el mapa Leaflet utilizando el elemento <div> como contenedor
-	let map = L.map(mapDiv).setView([regs[i].latitud, regs[i].longitud], 13);
+	let map = L.map(mapDiv).setView([regs[i].latitud, regs[i].longitud], 18);
 
 	// Agregar la capa de mapeo de OpenStreetMap al mapa
 	L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -440,8 +516,8 @@ function crearDivDetallado(i) {
 	function eliminarRegistro(indiceRegistro) {
 		regs.splice(indiceRegistro, 1);
 		guardar();
-		registroActual = null;
 		inicio();
+		registroActual = null;
 	}
 }
 function crearDivRegistros() {
@@ -453,15 +529,15 @@ function crearDivRegistros() {
 	//añadir los registros al html
 	//este bucle recorre todos los registros y mete todas sus fechas diferentes en el array dias
 	/* for (let i = 0; i < regs.length; i++) {
-    let existe = false;
-    for (let j = 0; j < dias.length && existe == false; j++) {
-      if (dias[j] === getFechaString(regs[i].fecha)) {
-        existe = true;
-      }
-    }
-    if (!existe) {
-      dias.push(getFechaString(regs[i].fecha));
-    }
+	let existe = false;
+	for (let j = 0; j < dias.length && existe == false; j++) {
+	  if (dias[j] === getFechaString(regs[i].fecha)) {
+		existe = true;
+	  }
+	}
+	if (!existe) {
+	  dias.push(getFechaString(regs[i].fecha));
+	}
   } */
 
 	//voy a hacerlo a lo loco y en vez de obtener solo los días que tienen registros
