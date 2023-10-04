@@ -222,43 +222,43 @@ function crearDivRegistrar() {
 
 	function nuevoRegistro() {
 		if (textoRegistrar.value) {
-		  var regNuevo = {};
-		  regNuevo.fecha = new Date();
-		  regNuevo.texto = textoRegistrar.value;
-		  regNuevo.textoLargo = cuadroTextoLargo.value;
-	  
-		  if ("geolocation" in navigator) {
-			navigator.geolocation.getCurrentPosition(
-			  function (position) {
-				var latitud = position.coords.latitude;
-				var longitud = position.coords.longitude;
-	  
-				regNuevo.latitud = latitud;
-				regNuevo.longitud = longitud;
-	  
-				// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
-				guardar();
-				inicio();
-				regNuevo = "";
-				latitud = "";
-				longitud = "";
-				registroActual = null;
-				cuadroTextoLargo.value = "";
-			  },
-			  function (error) {
-				console.log("Error al obtener la ubicación");
-			  }
-			);
-		  } else {
-			console.log("Geolocalización no está disponible en este navegador.");
-		  }
-	  
-		  if (regs) {
-			regs.unshift(regNuevo);
-		  }
+			var regNuevo = {};
+			regNuevo.fecha = new Date();
+			regNuevo.texto = textoRegistrar.value;
+			regNuevo.textoLargo = cuadroTextoLargo.value;
+
+			if ("geolocation" in navigator) {
+				navigator.geolocation.getCurrentPosition(
+					function (position) {
+						var latitud = position.coords.latitude;
+						var longitud = position.coords.longitude;
+
+						regNuevo.latitud = latitud;
+						regNuevo.longitud = longitud;
+
+						// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
+						guardar();
+						inicio();
+						regNuevo = "";
+						latitud = "";
+						longitud = "";
+						registroActual = null;
+						cuadroTextoLargo.value = "";
+					},
+					function (error) {
+						console.log("Error al obtener la ubicación");
+					}
+				);
+			} else {
+				console.log("Geolocalización no está disponible en este navegador.");
+			}
+
+			if (regs) {
+				regs.unshift(regNuevo);
+			}
 		}
-	  }
-	  
+	}
+
 }
 function crearDivFavoritos() {
 	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
@@ -323,7 +323,8 @@ function crearDivDetallado(i) {
 	relojDivDetallado = setInterval(function () {
 		contadorTiempo.innerHTML = mostrarTiempo(i);
 	}, 200);
-	crearElemento("coordenadas", divDetallado, "div", regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
+	crearElemento("coordenadas", divDetallado, "a", "https://www.google.es/maps/@" + regs[i].latitud + "," + regs[i].longitud+",17z?entry=ttu", ["coordenadas"]);
+	coordenadas
 
 	//div texto largo
 	let modoEdicion = false;
