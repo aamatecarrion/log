@@ -226,21 +226,19 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud=0;
-			regNuevo.longitud=0;
-				if ("geolocation" in navigator) {
-					navigator.geolocation.getCurrentPosition(
-						function (position) {
-							let latitud = position.coords.latitude;
-							let longitud = position.coords.longitude;
-							regNuevo.latitud = latitud;
-							regNuevo.longitud = longitud;
-						},
-						function (error) {
-							console.log("error");
-						}
+			if ("geolocation" in navigator) {
+				navigator.geolocation.getCurrentPosition(
+					function (position) {
+						var latitud = position.coords.latitude;
+						var longitud = position.coords.longitude;
+					},
+					function (error) {
+						console.log("error");
+					}
 					);
 				}
+				regNuevo.latitud=latitud;
+				regNuevo.longitud=longitud;
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
