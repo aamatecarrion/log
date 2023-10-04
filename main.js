@@ -323,8 +323,9 @@ function crearDivDetallado(i) {
 	relojDivDetallado = setInterval(function () {
 		contadorTiempo.innerHTML = mostrarTiempo(i);
 	}, 200);
-	crearElemento("coordenadas", divDetallado, "a", "https://www.google.es/maps/@" + regs[i].latitud + "," + regs[i].longitud+",17z?entry=ttu", ["coordenadas"]);
-	coordenadas
+	crearElemento("coordenadas", divDetallado, "a",regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
+	coordenadas.href="https://www.google.es/maps/@"+regs[i].latitud + "," + regs[i].longitud+",17z?entry=ttu"
+
 
 	//div texto largo
 	let modoEdicion = false;
