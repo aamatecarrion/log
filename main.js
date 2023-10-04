@@ -286,36 +286,44 @@ function crearDivRegistrar() {
 
 
 	function nuevoRegistro() {
-		let regNuevo = {};
-
 		if (textoRegistrar.value) {
-			let regNuevo = {};
+			var regNuevo = {};
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud="0"
-			regNuevo.longitud="0"
-			if ("geolocatioren" in navigator) {
+
+			if ("geolocation" in navigator) {
 				navigator.geolocation.getCurrentPosition(
 					function (position) {
-						let latitud = position.coords.latitude;
-						let longitud = position.coords.longitude;
+						var latitud = position.coords.latitude;
+						var longitud = position.coords.longitude;
+
 						regNuevo.latitud = latitud;
 						regNuevo.longitud = longitud;
+
+						// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
+						guardar();
+						inicio();
+						regNuevo = "";
+						latitud = "";
+						longitud = "";
+						registroActual = null;
+						cuadroTextoLargo.value = "";
 					},
 					function (error) {
-						console.log("error");
+						console.log("Error al obtener la ubicación");
 					}
 				);
+			} else {
+				console.log("Geolocalización no está disponible en este navegador.");
 			}
+
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
-			registroActual = null;
-			guardar();
-			inicio();
 		}
 	}
+
 }
 function crearDivFavoritos() {
 	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
@@ -477,7 +485,7 @@ function crearDivDetallado(i) {
 
 	// Agregar un marcador al mapa (asegúrate de que regs[i].latitud y regs[i].longitud estén definidos)
 	let marker = L.marker([regs[i].latitud, regs[i].longitud]).addTo(map);
-	const fecha = regs[i].fecha; // Puedes reemplazar esto con tu objeto Date
+	const fecha = regs[i].fecha // Puedes reemplazar esto con tu objeto Date
 
 	// Obtenemos los componentes de fecha y hora
 	const año = fecha.getFullYear();
@@ -656,7 +664,6 @@ function guardar() {
 	if (pass == "") {
 		localStorage.setItem("favoritos", JSON.stringify(favs));
 		localStorage.setItem("registros", JSON.stringify(regs));
-		console.log("se acaban de guardar los registros")
 		localStorage.setItem("colores", JSON.stringify(colores));
 		console.log("guardado en texto plano");
 	} else {
