@@ -211,6 +211,9 @@ body {
 .eliminar:hover {
   opacity: 0.5;
 }
+.botones{
+  text-align: right;
+}
 .divdescifrar {
   text-align: center;
 }
