@@ -243,7 +243,7 @@ function crearDivRegistrar() {
 					);
 				}
 			}
-			while (latitud === undefined)
+			while (regNuevo.latitud === undefined)
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
