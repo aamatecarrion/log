@@ -226,8 +226,6 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud=0;
-			regNuevo.longitud=0;
 			do {
 				if ("geolocation" in navigator) {
 					navigator.geolocation.getCurrentPosition(
@@ -250,6 +248,7 @@ function crearDivRegistrar() {
 			guardar();
 			inicio();
 			registroActual = null;
+			cuadroTextoLargo.value="";
 		}
 	}
 }
