@@ -222,7 +222,7 @@ function crearDivRegistrar() {
 
 	function nuevoRegistro() {
 		if (textoRegistrar.value) {
-			let regNuevo = {};
+			var regNuevo = {};
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
@@ -257,6 +257,9 @@ function crearDivRegistrar() {
 			guardar();
 			guardar();
 			inicio();
+			regNuevo=""
+			latitud=""
+			longitud=""
 			registroActual = null;
 			cuadroTextoLargo.value="";
 		}
