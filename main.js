@@ -220,36 +220,34 @@ function crearDivRegistrar() {
 		this.style.height = this.scrollHeight + 5 + "px";
 	});
 
-	async function nuevoRegistro() {
+	function nuevoRegistro() {
 		if (textoRegistrar.value) {
 			let regNuevo = {};
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			regNuevo.latitud = navigator.geolocation.getCurrentPosition(
-				async function (position) {
-					return position.coords.latitude;
-
-				},
-				async function (error) {
-					console.log("error");
+			do {
+				if ("geolocation" in navigator) {
+					navigator.geolocation.getCurrentPosition(
+						function (position) {
+							let latitud = position.coords.latitude;
+							let longitud = position.coords.longitude;
+							regNuevo.latitud = latitud;
+							regNuevo.longitud = longitud;
+						},
+						function (error) {
+							console.log("error");
+						}
+					);
 				}
-			);
-			regNuevo.longitud = navigator.geolocation.getCurrentPosition(
-				async function (position) {
-					return position.coords.longitude;
-					
-				},
-				async function (error) {
-					console.log("error");
-				}
-			);
+			}
+			while (latitud === undefined)
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
 			guardar();
-			inicio();
 			registroActual = null;
+			inicio();
 		}
 	}
 }
