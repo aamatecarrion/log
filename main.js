@@ -226,88 +226,39 @@ function crearDivRegistrar() {
 			regNuevo.fecha = new Date();
 			regNuevo.texto = textoRegistrar.value;
 			regNuevo.textoLargo = cuadroTextoLargo.value;
-			var latitud;
-			var longitud;
+
 			if ("geolocation" in navigator) {
 				navigator.geolocation.getCurrentPosition(
 					function (position) {
-						latitud = position.coords.latitude;
-						longitud = position.coords.longitude;
+						var latitud = position.coords.latitude;
+						var longitud = position.coords.longitude;
+
+						regNuevo.latitud = latitud;
+						regNuevo.longitud = longitud;
+
+						// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
+						guardar();
+						inicio();
+						regNuevo = "";
+						latitud = "";
+						longitud = "";
+						registroActual = null;
+						cuadroTextoLargo.value = "";
 					},
 					function (error) {
-						console.log("error");
+						console.log("Error al obtener la ubicación");
 					}
-					);
-				}
-				regNuevo.latitud=latitud;
-				regNuevo.longitud=longitud;
+				);
+			} else {
+				console.log("Geolocalización no está disponible en este navegador.");
+			}
+
 			if (regs) {
 				regs.unshift(regNuevo);
 			}
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			guardar();
-			inicio();
-			regNuevo=""
-			latitud=""
-			longitud=""
-			registroActual = null;
-			cuadroTextoLargo.value="";
 		}
 	}
-}
-function crearDivFavoritos() {
-	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
-	crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
-		editarFavoritos = true;
-		inicio();
-	});
-	//botones de favoritos guardados
-	for (let i = 0; i < favs.length; i++) {
-		//añadir un botón al cuadro
-		crearElemento("favHtml", divFavoritos, "div", favs[i], ["fav", "boton"], function (e) {
-			console.log(e.srcElement.innerText);
-			textoRegistrar.value = e.srcElement.innerText;
-		});
-	}
-}
-function crearEditarFavs() {
-	crearElemento("divEditarFavoritos", root, "div", undefined, ["divfavoritos"]);
-	crearElemento("noEditarFavs", divEditarFavoritos, "button", "No editar", ["boton", "noeditarfavs"], function () {
-		editarFavoritos = false;
-		inicio();
-	});
-	//botones de favoritos guardados
-	for (let i = 0; i < favs.length; i++) {
-		crearElemento("favHtml", divEditarFavoritos, "button", favs[i], ["faveliminar", "boton"], function () {
-			eliminarFav(i);
-		});
-	}
-	function eliminarFav(indiceFav) {
-		favs.splice(indiceFav, 1);
-		guardar();
-		inicio();
-	}
-	crearElemento("inputNuevoFav", divEditarFavoritos, "div", undefined, ["inputnuevofav"]);
-	crearElemento("textoNuevoFav", inputNuevoFav, "input", "Añadir", ["textonuevofav"], nuevoFav);
-	crearElemento("botonNuevoFav", inputNuevoFav, "button", "Ok", ["submitfav", "boton"], nuevoFav);
-	function nuevoFav() {
-		if (textoNuevoFav.value) {
-			favs.unshift(textoNuevoFav.value);
-			duplicados();
-			guardar();
-			inicio();
-		}
-	}
+
 }
 function crearDivDetallado(i) {
 	crearElemento("divDetallado", root, "div", undefined, ["divdetallado"]);
