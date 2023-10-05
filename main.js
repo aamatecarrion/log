@@ -219,32 +219,69 @@ function crearDivRegistrar() {
 		this.style.height = "auto";
 		this.style.height = this.scrollHeight + 5 + "px";
 	});
-	crearElemento("subir", root, "input", "Subir", ["boton", "subir"], leerArchivos);
-	subir.type = "file"
-	subir.id = "fileInput"
-	subir.accept = ".txt"
-	crearElemento("contenido", root, "div", undefined, ["subir"])
+	// ... Código anterior ...
+	const contenidoArchivo = document.createElement("div");
+	contenidoArchivo.id = "contenidoArchivo";
+	root.appendChild(contenidoArchivo);
+
+	// Crear el botón "Subir" y el campo de entrada de archivo
+	const subir = document.createElement("input");
+	subir.type = "file";
+	subir.id = "fileInput";
+	subir.accept = ".txt";
+	subir.style.display = "none"; // Ocultar el campo de entrada de archivo
+	subir.multiple = "true";
+	root.appendChild(subir);
+
+	// Crear un botón personalizado para seleccionar archivos
+	const botonSeleccionarArchivos = document.createElement("button");
+	botonSeleccionarArchivos.textContent = "Seleccionar Archivos";
+	botonSeleccionarArchivos.className = "boton boton-seleccionar-archivos";
+	root.appendChild(botonSeleccionarArchivos);
+
+	// Crear el botón de descarga
+	const botonDescargar = document.createElement("button");
+	botonDescargar.textContent = "Descargar";
+	botonDescargar.className = "boton boton-descargar";
+	root.appendChild(botonDescargar);
+
+	// Manejar el clic en el botón para activar el campo de entrada de archivo
+	botonSeleccionarArchivos.addEventListener("click", function () {
+		subir.click();
+	});
+
+	// Escuchar cambios en el campo de entrada de archivo
+	subir.addEventListener("change", function () {
+		leerArchivos();
+	});
+
+	// Manejar el clic en el botón de descarga
+	botonDescargar.addEventListener("click", function () {
+		descargarArchivoDeTexto();
+	});
+
+	// Crear la función leerArchivos con la lógica de procesamiento de archivos.
 	async function leerArchivos() {
 		const fileInput = document.getElementById("fileInput");
 		const contenidoArchivo = document.getElementById("contenidoArchivo");
 		const files = fileInput.files;
-	
+
 		if (files.length === 0) {
 			contenidoArchivo.textContent = "Por favor, selecciona al menos un archivo.";
 			return;
 		}
-	
+
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 			const reader = new FileReader();
-	
+
 			await new Promise((resolve) => {
 				reader.onload = function (e) {
 					const contenido = e.target.result;
 					contenidoArchivo.textContent = contenido;
-	
-					if (comprobarJSON(contenidoArchivo)) {
-						let importar = JSON.parse(contenidoArchivo);
+
+					try {
+						const importar = JSON.parse(contenido);
 						console.log(importar);
 						for (let i = 0; i < importar.registros.length; i++) {
 							importar.registros[i].fecha = new Date(importar.registros[i].fecha);
@@ -254,85 +291,86 @@ function crearDivRegistrar() {
 						colores = importar.colores;
 						duplicados();
 						guardar();
-					} else if (contenidoArchivo == "") {
-						console.log("vacio");
-					} else {
+					} catch (error) {
+						console.error("Error al analizar JSON:", error);
 						alert("Los datos no están bien formados");
 					}
+
+					// Limpiar el contenido una vez procesado
+					contenidoArchivo.textContent = "";
+					inicio();
 					resolve();
 				};
 				reader.readAsText(file);
 			});
 		}
 	}
-	
-	crearElemento("descargar",root,"div","Descargar","descargar",descargarArchivoDeTexto)
-	function descargarArchivoDeTexto() {
-		// Contenido del archivo de texto
-		root.innerHTML = "";
-		crearElemento("divExportar", root, "div", undefined, ["divexportar"]);
-		const exportar = {};
-		exportar.registros = regs;
-		exportar.favoritos = favs;
-		exportar.colores = colores;
-		crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), ["textoexportar"]);
-		const contenido = JSON.stringify(exportar)
+}
 
-		// Crear un elemento <a> para el enlace de descarga
-		const enlace = document.createElement("a");
-		enlace.href = "data:text/plain;charset=utf-8," + encodeURIComponent(contenido);
-		enlace.download = "log.txt";
+crearElemento("descargar", root, "div", "Descargar", "descargar", descargarArchivoDeTexto);
+function descargarArchivoDeTexto() {
+	// Contenido del archivo de texto
+	root.innerHTML = "";
+	crearElemento("divExportar", root, "div", undefined, ["divexportar"]);
+	const exportar = {};
+	exportar.registros = regs;
+	exportar.favoritos = favs;
+	exportar.colores = colores;
+	crearElemento("textoExportar", divExportar, "div", JSON.stringify(exportar), ["textoexportar"]);
+	const contenido = JSON.stringify(exportar);
 
-		// Simular un clic en el enlace para iniciar la descarga
-		enlace.style.display = "none";
-		document.body.appendChild(enlace);
-		enlace.click();
-		document.body.removeChild(enlace);
-		inicio();
-	}
+	// Crear un elemento <a> para el enlace de descarga
+	const enlace = document.createElement("a");
+	enlace.href = "data:text/plain;charset=utf-8," + encodeURIComponent(contenido);
+	enlace.download = "log.txt";
 
+	// Simular un clic en el enlace para iniciar la descarga
+	enlace.style.display = "none";
+	document.body.appendChild(enlace);
+	enlace.click();
+	document.body.removeChild(enlace);
+	inicio();
+}
 
+function nuevoRegistro() {
+	if (textoRegistrar.value) {
+		var regNuevo = {};
+		regNuevo.fecha = new Date();
+		regNuevo.texto = textoRegistrar.value;
+		regNuevo.textoLargo = cuadroTextoLargo.value;
 
-	function nuevoRegistro() {
-		if (textoRegistrar.value) {
-			var regNuevo = {};
-			regNuevo.fecha = new Date();
-			regNuevo.texto = textoRegistrar.value;
-			regNuevo.textoLargo = cuadroTextoLargo.value;
+		if ("geolocation" in navigator) {
+			navigator.geolocation.getCurrentPosition(
+				function (position) {
+					var latitud = position.coords.latitude;
+					var longitud = position.coords.longitude;
 
-			if ("geolocation" in navigator) {
-				navigator.geolocation.getCurrentPosition(
-					function (position) {
-						var latitud = position.coords.latitude;
-						var longitud = position.coords.longitude;
+					regNuevo.latitud = latitud;
+					regNuevo.longitud = longitud;
 
-						regNuevo.latitud = latitud;
-						regNuevo.longitud = longitud;
+					// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
+					guardar();
+					inicio();
+					regNuevo = "";
+					latitud = "";
+					longitud = "";
+					registroActual = null;
+					cuadroTextoLargo.value = "";
+				},
+				function (error) {
+					console.log("Error al obtener la ubicación");
+				}
+			);
+		} else {
+			console.log("Geolocalización no está disponible en este navegador.");
+		}
 
-						// Una vez que se ha obtenido la ubicación, puedes continuar con el resto del código
-						guardar();
-						inicio();
-						regNuevo = "";
-						latitud = "";
-						longitud = "";
-						registroActual = null;
-						cuadroTextoLargo.value = "";
-					},
-					function (error) {
-						console.log("Error al obtener la ubicación");
-					}
-				);
-			} else {
-				console.log("Geolocalización no está disponible en este navegador.");
-			}
-
-			if (regs) {
-				regs.unshift(regNuevo);
-			}
+		if (regs) {
+			regs.unshift(regNuevo);
 		}
 	}
-
 }
+
 function crearDivFavoritos() {
 	crearElemento("divFavoritos", root, "div", undefined, ["divfavoritos"]);
 	crearElemento("editarFavs", divFavoritos, "button", "Editar", ["editarfavs", "boton"], function () {
@@ -397,8 +435,7 @@ function crearDivDetallado(i) {
 		contadorTiempo.innerHTML = mostrarTiempo(i);
 	}, 200);
 	crearElemento("coordenadas", divDetallado, "a", regs[i].latitud + ", " + regs[i].longitud, ["coordenadas"]);
-	coordenadas.href = "https://www.google.es/maps/@" + regs[i].latitud + "," + regs[i].longitud + ",17z?entry=ttu"
-
+	coordenadas.href = "https://www.google.es/maps/@" + regs[i].latitud + "," + regs[i].longitud + ",17z?entry=ttu";
 
 	//div texto largo
 	let modoEdicion = false;
@@ -493,7 +530,7 @@ function crearDivDetallado(i) {
 
 	// Agregar un marcador al mapa (asegúrate de que regs[i].latitud y regs[i].longitud estén definidos)
 	let marker = L.marker([regs[i].latitud, regs[i].longitud]).addTo(map);
-	const fecha = regs[i].fecha // Puedes reemplazar esto con tu objeto Date
+	const fecha = regs[i].fecha; // Puedes reemplazar esto con tu objeto Date
 
 	// Obtenemos los componentes de fecha y hora
 	const año = fecha.getFullYear();
@@ -531,9 +568,9 @@ function crearDivDetallado(i) {
 	}
 	function eliminarRegistro(indiceRegistro) {
 		regs.splice(indiceRegistro, 1);
+		registroActual = null;
 		guardar();
 		inicio();
-		registroActual = null;
 	}
 }
 function crearDivRegistros() {
